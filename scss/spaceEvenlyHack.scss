@@ -1,0 +1,17 @@
+@mixin space-evenly-hack {
+  justify-content: space-between;
+  &:before,
+  &:after {
+    // ungodly hack to work around edge/safari's terrible flexbox implementation. Specifically, justify-content: space-evenly.
+    // see https://stackoverflow.com/questions/47534216/how-to-make-css-justify-contentspace-evenly-fallback-to-space-between-on-safari
+    content: "";
+    display: block;
+  }
+}
+@mixin undo-space-evenly-hack {
+  &:before,
+  &:after {
+    // ungodly hack to work around other ungodly hack to work around edge/safari's terrible flexbox implementation of justify-content: space-evenly
+    display: none;
+  }
+}
