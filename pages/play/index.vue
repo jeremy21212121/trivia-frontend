@@ -1,181 +1,247 @@
 <style lang="scss" scoped>
-section {
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-  align-items: center;
-  animation: 1s appear;
-  &.game {
-    justify-content: flex-start;
-  }
-  &.result {
-    justify-content: flex-start;
-    // overflow: hidden;
-    svg.result-icon {
-      width: 85%;
-      margin-top: 64px;
-    }
-    svg.radial {
-      position: fixed;
-      top: 64px;
-      z-index: -1;
-      animation:rotate 30s infinite linear;
-    }
-    p {
-      font-size: 28px;
-      text-shadow: 0 0px 2px rgba(255,255,255,0.16),
-                  0 0px 2px rgba(255,255,255,0.23);
-    }
-    a {
-      margin: auto 0;
-    }
-  }
-  div {
-    min-height: 33vh;
-    width: 100%;
-    h1.category {
-      margin-top: 16px;
-      padding-bottom: 4px;
-      color: rgba(255,255,255,0.7);
-      font-size: 24px;
-      text-transform: capitalize;
-    }
-    svg {
-      width: 25%;
-    }
-    .question-number {
-      color: rgba(255,255,255,0.7);
-      font-size: 18px;
-      padding-bottom: 4px;
-      margin-top: 16px;
-    }
-    .difficulty {
-      display: block;
-      width: 25%;
-      color: rgba(255,255,255,0.7);
-      padding: 4px 8px;
-      margin: 6px auto;
-      border-radius: 4px;
-      font-size: 16px;
-      font-weight: bold;
-      text-transform: capitalize;
-      &.easy {
-        background-color: rgba(0, 128, 0, 0.5);
-      }
-      &.medium {
-        background-color: rgba(255, 255, 0, 0.5);
-      }
-      &.hard {
-        background-color: rgba(255, 0, 0, 0.5);
-      }
-    }
-  }
+@import '@/scss/colors.scss';
+@import '@/scss/boxShadows.scss';
+@import '@/scss/navButton.scss';
 
-  p {
-    display: flex;
-    align-items: center;
-    color: rgba(255,255,255,0.7);
-    min-height: 15vh;
-    margin: 0 10px;
-    margin-top: 16px;
-    font-size: 20px;
-    text-align: center;
-  }
-  ol {
+.container {
+  nav {
+    position: absolute;
+    margin: 0;
     width: 100%;
-    padding: 0;
-    margin: auto 0;
-    list-style-type: none;
-    height: 33vh;
+    ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: space-between;
+      li {
+        margin: 8px;
+        a {
+          svg {
+            // padding: 4px;
+            // width: 42px;
+            // height: 42px;
+            // background-color: $primary-faint;
+            // border-radius: 25%;
+            // @include bs-white-0;
+            // transition: background-color, box-shadow 100ms ease-in-out;
+            // -webkit-tap-highlight-color: $primary-bright;
+            @include nav-button(42px);
+          }
+          &:hover, &:active {
+            svg {
+              // background-color: $primary-bright;
+              // box-shadow: none;
+              @include nav-button-active;
+            }
+          }
+        }
+      }
+    }
+  }
+  section {
+    width: 100%;
+    min-height: 98vh;
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
-    li {
-      width: 100%;
-      // display: block;
-      color: rgba(255,255,255,0.7);
+    justify-content: space-evenly;
+    align-items: center;
+    animation: 1s appear;
+    // &.game {
+    //   // justify-content: flex-start;
+    // }
+    &.result {
+      justify-content: flex-start;
+      // overflow: hidden;
+      svg.result-icon {
+        width: 85%;
+        max-width: 531px;
+        margin-top: 64px;
+      }
+      svg.radial {
+        max-width: 531px;
+        position: fixed;
+        top: 64px;
+        z-index: -1;
+        animation:rotate 30s infinite linear;
+      }
+      p {
+        font-size: 28px;
+        text-shadow: 0 0px 2px rgba(255,255,255,0.16),
+                    0 0px 2px rgba(255,255,255,0.23);
+      }
       a {
-        width: 66%;
+        margin: auto 0;
+      }
+    }
+    div {
+      margin: 3vh 0;
+      margin: auto 0;
+      width: 100%;
+      h1.category {
+        margin-top: 16px;
+        padding-bottom: 4px;
+        color: rgba(255,255,255,0.7);
+        font-size: 24px;
+        text-transform: capitalize;
+      }
+      svg {
+        width: 25%;
+      }
+      .question-number {
+        color: rgba(255,255,255,0.7);
+        font-size: 18px;
+        padding-bottom: 4px;
+        margin-top: 16px;
+      }
+      .difficulty {
+        display: block;
+        width: 25%;
+        color: rgba(255,255,255,0.7);
+        padding: 4px 8px;
+        margin: 6px auto;
+        border-radius: 4px;
+        font-size: 16px;
+        font-weight: bold;
+        text-transform: capitalize;
+        &.easy {
+          background-color: rgba(0, 128, 0, 0.5);
+        }
+        &.medium {
+          background-color: rgba(255, 255, 0, 0.5);
+        }
+        &.hard {
+          background-color: rgba(255, 0, 0, 0.5);
+        }
+      }
+    }
+    p {
+      display: flex;
+      align-items: center;
+      color: rgba(255,255,255,0.7);
+      // min-height: 15vh;
+      // margin: 4px 10px;
+      // margin-top: 16px;
+      line-height: 1.3;
+      margin: 5vh 1vw;
+      margin: auto 1vw;
+      font-size: 20px;
+      text-align: center;
+    }
+    ol {
+      width: 100%;
+      padding: 0;
+      margin: 0;
+      margin-top: 3vh;
+      margin: auto 0;
+      list-style-type: none;
+      // height: 33vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      li {
+        width: 100%;
+        // display: block;
+        margin: 1.5vh 0;
+        color: rgba(255,255,255,0.7);
+        a {
+          width: 66%;
+        }
       }
     }
   }
-
 }
 </style>
 
 <template>
-  <main class="container">
-    <section v-if="isPlay" class="game">
-      <div>
-        <h1 class="category" title="category">
-          {{ questionObject.category.toLocaleLowerCase() }}
-        </h1>
-        <component :is="categoriesDict.find(obj => obj.apiName === questionData.question.category).componentName" />
-        <h2 class="question-number">
-          Question {{ questionData.number + 1 }}/{{ questionsPerGame }}
-        </h2>
-        <span :class="questionObject.difficulty" class="difficulty" title="difficulty">
-          {{ questionObject.difficulty }}
-        </span>
-        <!-- <span class="difficulty" title="question type">
-          {{ questionObject.type === 'multiple' ? 'multiple choice' : 'true or false' }}
-        </span> -->
-      </div>
-      <p>
-        {{ questionData.question.question }}
-      </p>
-      <ol>
-        <li
-          v-for="(possibleAnswer, index) in questionData.question.possible_answers"
-          :key="'option-' + index"
-        >
-          <a
-            @click.prevent="handleGuess(index)"
-            href="#"
-            class="button--green"
+  <client-only>
+    <main class="container">
+      <nav>
+        <ul>
+          <li>
+            <a href="#" @click.prevent="handleBack" title="back to categories">
+              <LeftArrow />
+            </a>
+          </li>
+          <li>
+            <a href="#" @click.prevent="handleClose" title="quit current game">
+              <CloseIcon />
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <section v-if="isPlay" class="game">
+        <div>
+          <h1 class="category" title="category">
+            {{ questionData.question.category.toLocaleLowerCase() }}
+          </h1>
+          <component :is="getCategorySvgComponent(questionData.question.category)" />
+          <h2 class="question-number">
+            Question {{ questionData.number + 1 }}/{{ questionsPerGame }}
+          </h2>
+          <span :class="questionData.question.difficulty" class="difficulty" title="difficulty">
+            {{ questionData.question.difficulty }}
+          </span>
+        </div>
+        <p>
+          {{ questionData.question.question }}
+        </p>
+        <ol>
+          <li
+            v-for="(possibleAnswer, index) in questionData.question.possible_answers"
+            :key="'option-' + index"
           >
-            {{ possibleAnswer }}
-          </a>
-        </li>
-      </ol>
-    </section>
-    <section
-      v-else-if="isResult"
-      class="result"
-      style="color:rgba(255,255,255,0.7);"
-    >
-      <component class="radial" :is="'RadialIcon'" />
-      <component class="result-icon" :is="results.value.isCorrectGuess ? 'CorrectIcon' : 'WrongIcon'"/>
-      <p>
-        {{ results.value.isCorrectGuess ? 'Correct!' : 'Wrong!' }}
-      </p>
-      <a @click="()=> !results.value.gameOver ? setResults({ active: false }) : null" class="button--green">Next question</a>
-    </section>
-    <section
-      v-else-if="this.results.value && this.results.value.gameOver"
-    >
-      <p>
-        Game Over!
-      </p>
-      <p>
-        {{this.results.value.score}} / 10
-      </p>
-    </section>
-    <section v-else>
-      <h1>Whoops</h1>
-      <nuxt-link :to="'/categories'">Go back</nuxt-link>
-    </section>
-  </main>
+            <a
+              @click.prevent="handleGuess(index)"
+              href="#"
+              class="button--green"
+            >
+              {{ possibleAnswer }}
+            </a>
+          </li>
+        </ol>
+      </section>
+      <section
+        v-else-if="isResult"
+        class="result"
+        style="color:rgba(255,255,255,0.7);"
+      >
+        <component class="radial" :is="'RadialIcon'" />
+        <component class="result-icon" :is="results.value.isCorrectGuess ? 'CorrectIcon' : 'WrongIcon'"/>
+        <p>
+          {{ results.value.isCorrectGuess ? 'Correct!' : 'Wrong!' }}
+        </p>
+        <aside
+          v-if="results.value.gameOver"
+          class="game-over"
+        >
+          <h2>Game Over!</h2>
+          <p>
+            {{ results.value.score }} / {{ questionsPerGame }}
+          </p>
+        </aside>
+        <a @click="resultNextHandler" href="#" class="button--green">{{ resultButtonText(results) }}</a>
+      </section>
+      <section v-else>
+        <!-- error -->
+        <h1>Whoops</h1>
+        <nuxt-link :to="'/categories'">Go back</nuxt-link>
+      </section>
+    </main>
+  </client-only>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import _categoriesArray from '@/static/categoriesArray'
+import LeftArrow from '@/components/icons/left-arrow.svg'
+import CloseIcon from '@/components/icons/close.svg'
 
 export default {
   name: 'PlayView',
   components: {
+    LeftArrow,
+    CloseIcon,
     AnimalsIcon: () => import('@/components/icons/animals.svg'),
     AnimeIcon: () => import('@/components/icons/anime.svg'),
     AnyIcon: () => import('@/components/icons/any.svg'),
@@ -208,19 +274,38 @@ export default {
   data() {
     return {
       // questionData: {},
-      error: false
+      error: false,
     }
   },
   methods: {
-    ...mapActions(['setQuestionData', 'setFetchError', 'setGuess', 'setQuestionAndResults', 'setResults']),
+    ...mapActions(['setQuestionData', 'clearQuestionData', 'setFetchError', 'setQuestionAndResults', 'setResults', 'clearResults', 'setGameStage']),
+    getCategorySvgComponent(apiName) {
+      const svgComponent = _categoriesArray.find(obj => obj.apiName === apiName)
+
+      // the component name or an empty string if we didn't find a match.
+      // Passing an empty string as the 'is' prop to the generic 'component' component will result in no component being rendered, which is acceptable error behaviour.
+      const componentName = svgComponent ? svgComponent.componentName : ''
+      return componentName
+    },
     handleGuess(guessInt) {
       const guessString = String(guessInt)
-      this.setGuess(guessString)
-      // clear question data
-      this.setQuestionData({})
       this.apiPost('/verify', { guess: guessString}, this.setQuestionAndResults, this.setFetchError)
-      // clear guess after submit
-      this.setGuess('')
+    },
+    initGame() {
+    // checks for game-in-progress to resume or begins a new game
+      if (!this.$isServer && this.selectedCategories.length) {
+        // we are client-side and have categories set
+        if ((!this.questionData.question && !this.results.active) || (this.results.value && this.results.value.gameOver && !this.results.active)) {
+          // no question, begin new game. This runs on first load or after game over
+          this.apiPost('/start', { categories: this.selectedCategories }, this.setQuestionData, this.setFetchError)
+        } else if (this.results.active) {
+          // results are active but there is no game over. This path runs when the browser is reloaded while gameSTage: 'results'
+          this.setGameStage('results')
+        } else {
+          // We have a question but no results. Attempt to resume game. This path can be triggered by a browser reload during gameSTage: 'play'
+          this.setGameStage('play')
+        }
+      }
     },
     apiPost(path, payload, success, fail) {
       let response
@@ -240,24 +325,59 @@ export default {
             : (fail(true))
         )
         .catch((e) => (this.setFetchError(e.message)))
+    },
+    resultNextHandler() {
+      if (!this.results.value.gameOver) {
+        this.setResults({ active: false }) // clear results to play next question
+        this.setGameStage('play') // play next question
+      } else {
+        // clean up
+        this.clearResults()
+        this.setGameStage(null)
+        // game is over, go back to categories
+        this.$router.push('/categories')
+      }
+    },
+    resultButtonText(results) {
+      if (results.value.gameOver) {
+        return 'New Game'
+      } else {
+        return 'Next'
+      }
+    },
+    handleBack() {
+      if (this.game.stage === 'game-over') {
+        // clear results and game stage on back
+        // otherwise the play button on /categories would return user to game over screen
+        this.clearResults()
+        this.setGameStage(null)
+      }
+      this.$router.push('/categories')
+    },
+    handleClose() {
+      this.clearQuestionData()
+      this.clearResults()
+      this.setGameStage(null)
+      this.$router.push('/')
     }
   },
   mounted() {
-    if (!this.$isServer && this.selectedCategories.length && !this.questionData.question) {
-      this.apiPost('/start', { categories: this.selectedCategories }, this.setQuestionData, this.setFetchError)
-    }
+    this.initGame()
   },
   computed: {
-    ...mapState(['selectedCategories', 'questionData', 'fetchError', 'guess', 'results', 'questionsPerGame', 'categoriesDict']),
+    ...mapState(['selectedCategories', 'questionData', 'fetchError', 'guess', 'results', 'questionsPerGame', 'game']),
     isPlay() {
-      return !this.isResult &&!this.guess.length && !!Object.keys(this.questionData).length
+      return this.game.stage === 'play' && !!this.questionData.question
     },
-    isGuess() {
-      return (!this.isPlay && typeof this.guess === 'string' && !!this.guess.length)
+    isLoading() {
+      return this.game.stage === 'loading'
     },
     isResult() {
-      return this.results.active
+      return this.game.stage === 'results' && this.results.active
     },
+    // isGameOver() {
+    //   return this.game.stage === 'game-over'
+    // },
     questionObject() {
       return this.questionData.question
     }

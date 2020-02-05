@@ -1,5 +1,7 @@
 <style lang="scss" scoped>
 @import '@/scss/boxShadows.scss';
+@import '@/scss/colors.scss';
+@import '@/scss/navButton.scss';
 
 section {
   display: flex;
@@ -21,10 +23,10 @@ section {
     justify-content: flex-end;
     align-items: center;
     border-radius: 3px;
-    border: 1px solid rgba(255, 255, 255, 0.01);
+    border: 1px solid $white-ulite;
     transition: all ease-in-out 190ms;
     &.active {
-      border-color: rgba(255, 255, 255, 0.1);
+      border-color: $white-light;
       @include bs-white-0b;
       background-color: rgba(63, 61, 86, 0.2);
       background-color: rgba(59, 128, 112, 0.1);
@@ -38,28 +40,39 @@ section {
       margin: auto 0;
     }
     p {
-      color: rgba(255, 255, 255, 0.6);
+      color: $white-med;
     }
   }
   a {
-    @include bs-black-3;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 100%;
-    background-color: #7BBD00;
+    // @include bs-black-3;
+    // border: 1px solid rgba(255, 255, 255, 0.1);
+    // border-radius: 100%;
+    // background-color: #7BBD00;
     position: fixed;
     bottom: 30px;
     right: 5%;
-    width: 60px;
-    height: 60px;
-    line-height: 60px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: rgba(255, 255, 255, 0.75);
+    // width: 60px;
+    // height: 60px;
+    // line-height: 60px;
+    // display: flex;
+    // justify-content: center;
+    // align-items: center;
+    // color: rgba(255, 255, 255, 0.75);
     text-decoration: none;
     font-weight: bold;
     font-size: 40px;
-    
+    svg {
+      @include nav-button(84px);
+      @include bs-white-1;
+      background-color: $primary;
+    }
+    &:hover, &:active {
+      svg {
+        @include nav-button-active;
+        @include bs-white-0b;
+        background-color: $primary-highlight;
+      }
+    }
   }
 }
 // @media screen and (min-width: 450px){
@@ -73,7 +86,7 @@ section {
     <h1 class="title">select your categories</h1>
     <section class="categories">
         <div
-          v-for="obj in categoriesDict"
+          v-for="obj in categoriesArray"
           :key="'cat-' + obj.key"
           @click="handleCategoryClick(obj.key)"
           :class="{ active: isSelected(obj.key), disabled: isDisabled(obj.key) }"
@@ -84,8 +97,8 @@ section {
             {{ obj.displayName }}
           </p>
         </div>
-        <nuxt-link to="/play" title="Start game">
-          &#x1f86a;
+        <nuxt-link to="/play" :title="gameInProgress ? 'resume game' : 'play'">
+          <RightArrow />
         </nuxt-link>
     </section>
   </main>
@@ -94,7 +107,9 @@ section {
 <script>
 /* eslint-disable */
 import { mapState, mapActions } from 'vuex'
+import _categoriesArray from '@/static/categoriesArray'
 
+import RightArrow from '@/components/icons/right-arrow.svg'
 import AnimalsIcon from '@/components/icons/animals.svg'
 import AnimeIcon from '@/components/icons/anime.svg'
 import AnyIcon from '@/components/icons/any.svg'
@@ -123,7 +138,7 @@ import VehiclesIcon from '@/components/icons/vehicles.svg'
 import VideogamesIcon from '@/components/icons/videogames.svg'
 
 export default {
-  name: 'PlayView',
+  name: 'CategoriesView',
   components: {
     AnyIcon,
     GeneralKnowledgeIcon,
@@ -149,14 +164,19 @@ export default {
     ComicsIcon,
     GadgetsIcon,
     AnimeIcon,
-    CartoonsIcon
+    CartoonsIcon,
+    RightArrow
   },
   data() {
     return {
+      categoriesArray: _categoriesArray
     }
   },
   computed: {
-    ...mapState(['selectedCategories', 'categoriesDict'])
+    ...mapState(['selectedCategories', 'questionData']),
+    gameInProgress() {
+      return this.questionData.hasOwnProperty('question')
+    }
   },
   methods: {
     ...mapActions([

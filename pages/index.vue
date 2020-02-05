@@ -3,7 +3,7 @@
     <section class="title">
       <logo />
       <h1 class="title">just trivia</h1>
-      <h2 class="subtitle">no bullshit</h2>
+      <h2 class="subtitle">no nonsense</h2>
     </section>
     <nuxt-link :to="'/categories'" class="button--green">Let's play!</nuxt-link>
   </main>
@@ -19,7 +19,10 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+h1.title {
+  font-size: 40px;
+}
 h1,
 h2 {
   animation: appear 1s;

@@ -7,22 +7,31 @@ export default {
    ** Headers of the page
    */
   head: {
-    title: process.env.npm_package_name || '',
+    title: 'Just Trivia',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       {
         hid: 'description',
         name: 'description',
-        content: process.env.npm_package_description || ''
+        content: 'A free mobile trivia game with no ads or tracking'
       }
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },
+  pwa: {
+    meta: {
+      name: 'Just Trivia',
+      description: 'A mobile trivia game with no ads or tracking',
+      author: 'Jeremy Poole',
+      nativeUI: true
+      // ogHost: 'justtrivia.fun',
+    }
+  },
   /*
    ** Customize the progress-bar color
    */
-  loading: { color: '#fff' },
+  loading: { color: '#1d1d1d' },
   /*
    ** Global CSS
    */

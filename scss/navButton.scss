@@ -1,0 +1,20 @@
+@import '@/scss/colors.scss';
+@import '@/scss/boxShadows.scss';
+
+@mixin nav-button($size) {
+  padding: 4px;
+  width: $size;
+  height: $size;
+  background-color: $primary-faint;
+  border-radius: 25%;
+  @include bs-white-0;
+  transition: background-color, box-shadow, transform 100ms ease-in-out;
+  -webkit-tap-highlight-color: $primary-bright;
+}
+
+@mixin nav-button-active {
+  background-color: $primary-bright;
+  box-shadow: none;
+  transform: scale(0.98);
+}
+
