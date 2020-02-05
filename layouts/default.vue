@@ -6,15 +6,21 @@
 <script>
 import { mapActions, mapState } from 'vuex';
 export default {
-  mounted() {
-    if (!this.$isServer) {
-      const lsSupport = this.detectLocalStorage();
-      this.setSupportsLocalStorage(lsSupport)
-      if (lsSupport) {
-        console.log('syncing')
-        this.syncStoreWithLocalStorage()
-      }
-    }
+  created() {
+    // set localStorage support and populate state from localStorage
+    // we want this to run once per app load, client-side only, as early as possible
+    // it enables resuming games on browser reload etc
+
+    // the backend could have a GET /currentQuestion endpoint to aid in resuming a game
+    // but then we'd need a GET /lastResults endpoint too in order to fully re-create state and ditch localStorage.
+    // or perhaps we could send the whole state along with each guess, let the backend keep track of it
+    // that would only require one endpoint: GET /gameState.
+
+    // Currently, all state is managed client-side and backend only has POST endpoints.
+    // i will overhaul the backend if there is a compelling reason. PROs: reduce client init code complexity
+    // CONS: It's a PWA not a thin client. loading from local storage is faster than a network request.
+    // "is it a thick client? thin client? no it's a medium client!" :P
+    this.initApp()
   },
   methods: {
     ...mapActions(['setSupportsLocalStorage', 'syncStoreWithLocalStorage']),
@@ -28,6 +34,15 @@ export default {
       } catch (e) {
         return false
       }
+    },
+    initApp() {
+      if (!this.$isServer) {
+        const lsSupport = this.detectLocalStorage()
+        this.setSupportsLocalStorage(lsSupport)
+        if (lsSupport) {
+          this.syncStoreWithLocalStorage()
+        }
+      }
     }
   },
   computed: {
@@ -37,6 +52,7 @@ export default {
 </script>
 <style lang="scss">
 @import '@/scss/spaceEvenlyHack.scss';
+@import '@/scss/colors.scss';
 
 html {
   font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',
@@ -53,7 +69,8 @@ html {
 
 .container {
   margin: 0 auto;
-  min-height: 100vh;
+  min-height: 98vh;
+  max-width: 1280px;
   display: flex;
   flex-direction: column;
   // justify-content: space-evenly;
@@ -82,7 +99,7 @@ h1 {
 h1.title {
   font-size: 32px;
   // color: #3F3D56;
-  color: #3b8070;
+  color: $primary;
   margin: 10px 0;
   text-shadow: 0 0px 2px rgba(255,255,255,0.16),
               0 0px 2px rgba(255,255,255,0.23);
@@ -99,15 +116,19 @@ h2 {
 .button--green {
   display: inline-block;
   border-radius: 4px;
-  border: 1px solid #3b8070;
-  color: #3b8070;
+  border: 1px solid $primary;
+  color: $primary;
   text-decoration: none;
   padding: 10px 30px;
+  background-color: rgba(0,0,0,0);
+  transition: background-color, color 100ms ease-in-out;
+  // hover state isn't reliably triggered on mobile
+  -webkit-tap-highlight-color: $primary;
 }
 
-.button--green:hover {
+.button--green:hover, .button--green:active {
   color: #fff;
-  background-color: #3b8070;
+  background-color: $primary;
 }
 
 .button--grey {
@@ -129,6 +150,14 @@ h2 {
   }
   100% {
     opacity: 1;
+  }
+}
+@keyframes disappear {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
   }
 }
 @keyframes rotate {
