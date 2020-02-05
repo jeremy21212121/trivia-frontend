@@ -10,7 +10,7 @@ section {
   animation: appear 1s;
   div.cat-box {
     @include bs-white-0;
-    margin: 8px 4px;
+    margin: 4px;
     padding: 2px 1px;
     width: 150px;
     // max-width: 46%;
@@ -34,6 +34,11 @@ section {
     }
     &.disabled {
       opacity: 0.2;
+    }
+    &:last-of-type {
+      flex-grow: 0;
+      width: 48%;
+      margin-right: auto;
     }
     svg {
       max-width: 220px;
