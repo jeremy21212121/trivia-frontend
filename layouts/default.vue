@@ -66,7 +66,9 @@ html {
   box-sizing: border-box;
   background-color: #1d1d1d;
 }
-
+body {
+  overflow: hidden;
+}
 .container {
   margin: 0 auto;
   min-height: 98vh;
