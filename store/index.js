@@ -140,6 +140,7 @@ export const actions = {
     // ensure questionData is cleared on fetchError
     commit('CLEAR_QUESTION_DATA')
     commit('SET_GAME_STAGE', null)
+    commit('CLEAR_IS_LOADING')
   },
   setResults({ commit }, obj) {
     commit('SET_RESULTS', obj)

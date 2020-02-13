@@ -2,7 +2,26 @@
 @import '@/scss/colors.scss';
 @import '@/scss/boxShadows.scss';
 @import '@/scss/navButton.scss';
+$med-grey: rgba(170, 170, 170, 0.1);
+$gris-brilliant: rgba(190, 190, 190, 0.2);
+$med-white: rgba(255, 255, 255, 0.1);
 
+@keyframes Loading {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+}
+
+.loading {
+  background-color: $med-grey;
+  // background: linear-gradient(to right, $med-grey, $med-grey 1%, $gris-foncee 2%, $gris-foncee 5%, $med-grey 6%);
+  // background: linear-gradient(270deg, #6a6f6b, #b9bab9, #878787);
+  background: linear-gradient(270deg, $med-grey, $gris-brilliant, $med-grey);
+  background-size: 600% 600%;
+  animation: Loading 2s ease infinite !important;
+  color: rgba(255,255,255,0.01) !important;
+  transition: all ease 0.5s;
+}
 .container {
   nav {
     position: absolute;
@@ -28,7 +47,7 @@
             // -webkit-tap-highlight-color: $primary-bright;
             @include nav-button(42px);
           }
-          &:hover, &:active {
+          &:hover {
             svg {
               // background-color: $primary-bright;
               // box-shadow: none;
@@ -46,23 +65,33 @@
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
-    animation: 1s appear;
+    animation: 1s appear ease;
+    transition: all ease 0.5s;
     // &.game {
     //   // justify-content: flex-start;
     // }
     &.result {
       justify-content: flex-start;
       // overflow: hidden;
+      svg {
+        transition: all 250ms ease;
+      }
+      svg.loading {
+        border-radius: 45%;
+      }
       svg.result-icon {
         width: 85%;
         max-width: 531px;
         margin-top: 64px;
+        z-index: 99;
+        animation: appear 0.5s ease;
       }
       svg.radial {
         max-width: 531px;
         position: fixed;
         top: 64px;
         z-index: -1;
+        animation: appear 1s ease;
         animation:rotate 30s infinite linear;
       }
       p {
@@ -78,15 +107,36 @@
       margin: 3vh 0;
       margin: auto 0;
       width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      animation: 1s appear ease;
       h1.category {
         margin-top: 16px;
-        padding-bottom: 4px;
+        padding: 4px 8px;
+        border-radius: 4px;
         color: rgba(255,255,255,0.7);
         font-size: 24px;
         text-transform: capitalize;
+        &.loading {
+          color: rgba(255,255,255,0.7) !important;
+          width: 66%;
+        }
       }
       svg {
         width: 25%;
+        margin: 6px 0;
+        // padding: 4px;
+        border-radius: 4px;
+        &.loading {
+          // opacity: 0.5;
+          fill-opacity: 0.3;
+        }
+      }
+      h2 {
+        padding: 4px 8px;
+        border-radius: 4px;
       }
       .question-number {
         color: rgba(255,255,255,0.7);
@@ -122,11 +172,16 @@
       // min-height: 15vh;
       // margin: 4px 10px;
       // margin-top: 16px;
+      border-radius: 4px;
       line-height: 1.3;
       margin: 5vh 1vw;
       margin: auto 1vw;
+      padding: 4px 8px;
       font-size: 20px;
       text-align: center;
+      // &.loading {
+      //   // line-height: 3em;
+      // }
     }
     ol {
       width: 100%;
@@ -172,29 +227,33 @@
       </nav>
       <section v-if="isPlay" class="game">
         <div>
-          <h1 class="category" title="category">
-            {{ questionData.question.category.toLocaleLowerCase() }}
+          <!-- mark everything else aria-hidden during loading so screen readers don't read out "Loading" over and over again -->
+          <h1 class="category" title="category" :class="{ loading: isLoading }">
+            <!-- {{ questionData.question.category.toLocaleLowerCase() }} -->
+            {{ currentCategory }}
           </h1>
-          <component :is="getCategorySvgComponent(questionData.question.category)" />
-          <h2 class="question-number">
-            Question {{ questionData.number + 1 }}/{{ questionsPerGame }}
+          <component :is="currentCategoryIconComponent" :class="{ loading: isLoading }"/>
+          <h2 class="question-number" :class="{ loading: isLoading }" :aria-hidden="isLoading">
+            Question {{ (questionData) ? questionData.number + 1 : ' ' }}/{{ (questionsPerGame) ? questionsPerGame : '  ' }}
           </h2>
-          <span :class="questionData.question.difficulty" class="difficulty" title="difficulty">
-            {{ questionData.question.difficulty }}
+          <span :class="{ loading: isLoading, currentDifficulty: !isLoading }" class="difficulty" title="difficulty" :aria-hidden="isLoading">
+            {{ currentDifficulty }}
           </span>
         </div>
-        <p>
-          {{ questionData.question.question }}
+        <p :class="{ loading: isLoading }" :aria-hidden="isLoading">
+          {{ (!isLoading && questionObject.question) ? questionObject.question : 'Loading...........................................................................................' }}
         </p>
-        <ol>
+        <ol :aria-hidden="isLoading">
           <li
-            v-for="(possibleAnswer, index) in questionData.question.possible_answers"
+            v-for="(possibleAnswer, index) in currentPossibleAnswers"
             :key="'option-' + index"
+            :aria-hidden="isLoading"
           >
             <a
               @click.prevent="handleGuess(index)"
               href="#"
               class="button--green"
+              :class="{ loading: isLoading }"
             >
               {{ possibleAnswer }}
             </a>
@@ -206,13 +265,14 @@
         class="result"
         style="color:rgba(255,255,255,0.7);"
       >
-        <component class="radial" :is="'RadialIcon'" />
-        <component class="result-icon" :is="results.value.isCorrectGuess ? 'CorrectIcon' : 'WrongIcon'"/>
-        <p>
-          {{ results.value.isCorrectGuess ? 'Correct!' : 'Wrong!' }}
+        <component v-if="results.active && results.value.isCorrectGuess" class="radial" :is="'RadialIcon'" />
+        <component v-if="!isLoading" class="result-icon" :is="results.value.isCorrectGuess ? 'CorrectIcon' : 'WrongIcon'"/>
+        <component v-else-if="isLoading" class="result-icon loading" :is="'EllipsisIcon'" />
+        <p :class="{ loading: isLoading }">
+          {{ (isLoading || !results.active) ? 'Loading...' : results.value.isCorrectGuess ? 'Correct!' : 'Wrong!' }}
         </p>
         <aside
-          v-if="results.value.gameOver"
+          v-if="results.active && results.value.gameOver"
           class="game-over"
         >
           <h2>Game Over!</h2>
@@ -220,9 +280,9 @@
             {{ results.value.score }} / {{ questionsPerGame }}
           </p>
         </aside>
-        <a @click="resultNextHandler" href="#" class="button--green">{{ resultButtonText(results) }}</a>
+        <a @click.prevent="resultNextHandler" :aria-hidden="isLoading" :class="{ loading: isLoading }" href="#" class="button--green">{{ resultButtonText }}</a>
       </section>
-      <section v-else>
+      <section v-else-if="isError">
         <!-- error -->
         <h1>Whoops</h1>
         <nuxt-link :to="'/categories'">Go back</nuxt-link>
@@ -236,12 +296,18 @@ import { mapState, mapActions } from 'vuex'
 import _categoriesArray from '@/static/categoriesArray'
 import LeftArrow from '@/components/icons/left-arrow.svg'
 import CloseIcon from '@/components/icons/close.svg'
+import AnyIcon from '@/components/icons/any.svg'
+import EllipsisIcon from '@/components/icons/ellipsis.svg'
+import CorrectIcon from '@/components/icons/correct.svg'
+import WrongIcon from '@/components/icons/wrong.svg'
+import RadialIcon from '@/components/icons/radial-white.svg'
 
 export default {
   name: 'PlayView',
   components: {
     LeftArrow,
     CloseIcon,
+    EllipsisIcon,
     AnimalsIcon: () => import('@/components/icons/animals.svg'),
     AnimeIcon: () => import('@/components/icons/anime.svg'),
     AnyIcon: () => import('@/components/icons/any.svg'),
@@ -267,28 +333,35 @@ export default {
     TelevisionIcon: () => import('@/components/icons/television.svg'),
     VehiclesIcon: () => import('@/components/icons/vehicles.svg'),
     VideogamesIcon: () => import('@/components/icons/videogames.svg'),
-    CorrectIcon: () => import('@/components/icons/correct.svg'),
-    WrongIcon: () => import('@/components/icons/wrong.svg'),
-    RadialIcon: () => import('@/components/icons/radial-white.svg')
+    // replace with static imports. they will definitely be needed.
+    CorrectIcon/*: () => import('@/components/icons/correct.svg')*/,
+    WrongIcon/*: () => import('@/components/icons/wrong.svg')*/,
+    RadialIcon/*: () => import('@/components/icons/radial-white.svg')*/
   },
   data() {
     return {
       // questionData: {},
-      error: false,
+      // error: false,
+      categoriesArray: _categoriesArray
     }
   },
   methods: {
-    ...mapActions(['setQuestionData', 'clearQuestionData', 'setFetchError', 'setQuestionAndResults', 'setResults', 'clearResults', 'setGameStage']),
-    getCategorySvgComponent(apiName) {
-      const svgComponent = _categoriesArray.find(obj => obj.apiName === apiName)
+    ...mapActions(['setQuestionData', 'clearQuestionData', 'setFetchError', 'setQuestionAndResults', 'setResults', 'clearResults', 'setGameStage', 'setIsLoading']),
+    // getCategorySvgComponent(apiName) {
+    //   // we will use the anycategory icon when loading
+    //   const categoryApiName = !this.isLoading ? apiName : 'Any Category'
+    //   const svgComponent = _categoriesArray.find(obj => obj.apiName === apiName)
 
-      // the component name or an empty string if we didn't find a match.
-      // Passing an empty string as the 'is' prop to the generic 'component' component will result in no component being rendered, which is acceptable error behaviour.
-      const componentName = svgComponent ? svgComponent.componentName : ''
-      return componentName
-    },
+    //   // the component name or an empty string if we didn't find a match.
+    //   // Passing an empty string as the 'is' prop to the generic 'component' component will result in no component being rendered, which is acceptable error behaviour.
+    //   const componentName = svgComponent ? svgComponent.componentName : ''
+    //   return componentName
+    // },
     handleGuess(guessInt) {
+      if (this.isLoading) { return }
       const guessString = String(guessInt)
+      // set game stage to results for loading animations
+      this.setGameStage('results')
       this.apiPost('/verify', { guess: guessString}, this.setQuestionAndResults, this.setFetchError)
     },
     initGame() {
@@ -297,6 +370,9 @@ export default {
         // we are client-side and have categories set
         if ((!this.questionData.question && !this.results.active) || (this.results.value && this.results.value.gameOver && !this.results.active)) {
           // no question, begin new game. This runs on first load or after game over
+          // set game stage to play for loading animations
+          this.setGameStage('play')
+          // start session and handle response
           this.apiPost('/start', { categories: this.selectedCategories }, this.setQuestionData, this.setFetchError)
         } else if (this.results.active) {
           // results are active but there is no game over. This path runs when the browser is reloaded while gameSTage: 'results'
@@ -308,6 +384,7 @@ export default {
       }
     },
     apiPost(path, payload, success, fail) {
+      this.setIsLoading(true)
       let response
       fetch('http://192.168.0.10:8765' + path, {
         method: 'POST',
@@ -319,10 +396,17 @@ export default {
         body: JSON.stringify(payload)
       })
         .then((resp) => resp.json())
-        .then((json) =>
-          json.success
-            ? (success(json))
-            : (fail(true))
+        .then((json) => {
+          if (json.success) {
+            success(json)
+            this.setIsLoading(false)
+          } else {
+            fail(true)
+          }
+        }
+          // json.success
+          //   ? (success(json))
+          //   : (fail(true))
         )
         .catch((e) => (this.setFetchError(e.message)))
     },
@@ -338,13 +422,13 @@ export default {
         this.$router.push('/categories')
       }
     },
-    resultButtonText(results) {
-      if (results.value.gameOver) {
-        return 'New Game'
-      } else {
-        return 'Next'
-      }
-    },
+    // resultButtonText(results) {
+    //   if (results.value.gameOver) {
+    //     return 'New Game'
+    //   } else {
+    //     return 'Next'
+    //   }
+    // },
     handleBack() {
       if (this.game.stage === 'game-over') {
         // clear results and game stage on back
@@ -358,6 +442,7 @@ export default {
       this.clearQuestionData()
       this.clearResults()
       this.setGameStage(null)
+      this.setIsLoading(false)
       this.$router.push('/')
     }
   },
@@ -365,22 +450,57 @@ export default {
     this.initGame()
   },
   computed: {
-    ...mapState(['selectedCategories', 'questionData', 'fetchError', 'guess', 'results', 'questionsPerGame', 'game']),
+    ...mapState(['selectedCategories', 'questionData', 'fetchError', 'guess', 'results', 'questionsPerGame', 'game', 'isLoading']),
     isPlay() {
-      return this.game.stage === 'play' && !!this.questionData.question
-    },
-    isLoading() {
-      return this.game.stage === 'loading'
+      return this.game.stage === 'play'
     },
     isResult() {
-      return this.game.stage === 'results' && this.results.active
+      return this.game.stage === 'results'
     },
     // isGameOver() {
     //   return this.game.stage === 'game-over'
     // },
+    isError() {
+      return this.fetchError
+    },
     questionObject() {
       return this.questionData.question
-    }
+    },
+    // isLoading() {
+    //   return this.questionObject === undefined
+    // },
+    currentCategory() {
+      return (!this.isLoading && this.questionObject) ? this.questionObject.category : 'Loading...'
+    },
+    currentCategoryIconComponent() {
+      let componentName = 'EllipsisIcon'
+      // we will use the anycategory icon when loading
+      if (this.questionObject && !this.isLoading) {
+        const svgComponent = this.categoriesArray.find(obj => obj.apiName === this.questionObject.category)
+        if (svgComponent) {
+          componentName = svgComponent.componentName
+        }
+      }
+      return componentName
+    },
+    currentDifficulty() {
+      return (!this.isLoading && this.questionObject && this.questionObject.difficulty) ? this.questionObject.difficulty : 'Loading...'
+    },
+    currentPossibleAnswers() {
+      return (!this.isLoading && this.questionObject.hasOwnProperty('possible_answers')) ? this.questionObject.possible_answers : ['Loading...', 'Loading...', 'Loading...', 'Loading...']
+    },
+    currentQuestionNumberString() {
+      return (!this.isLoading )
+    },
+    resultButtonText() {
+      if (this.isLoading) {
+        return 'Loading'
+      } else if (this.results.active && this.results.value.gameOver) {
+        return 'New Game'
+      } else {
+        return 'Next'
+      }
+    },
   }
 }
 </script>
