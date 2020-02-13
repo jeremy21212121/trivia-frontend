@@ -1,0 +1,18 @@
+[Unit]
+Description=Just Trivia game front end
+Requires=network-online.target nginx.service
+After=syslog.target network-online.target
+[Service]
+WorkingDirectory=/opt/just-trivia-nuxt
+ExecStart=/usr/bin/npm run start
+Restart=always
+# Restart service after 10 seconds if node service crashes 
+RestartSec=10
+# Output to syslog
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=just-trivia-nuxt
+User=ubuntu
+Group=ubuntu
+Environment="NUXT_PORT=3000"
+

@@ -386,7 +386,7 @@ export default {
     apiPost(path, payload, success, fail) {
       this.setIsLoading(true)
       let response
-      fetch('http://192.168.0.10:8765' + path, {
+      fetch('https://api.justtrivia.fun' + path, {
         method: 'POST',
         headers: {
           Accept: 'application/json',
