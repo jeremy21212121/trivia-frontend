@@ -11,7 +11,9 @@ $med-white: rgba(255, 255, 255, 0.1);
     50%{background-position:100% 50%}
     100%{background-position:0% 50%}
 }
-
+body {
+  overflow: hidden;
+}
 .loading {
   background-color: $med-grey;
   // background: linear-gradient(to right, $med-grey, $med-grey 1%, $gris-foncee 2%, $gris-foncee 5%, $med-grey 6%);
