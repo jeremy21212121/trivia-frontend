@@ -11,8 +11,9 @@ $med-white: rgba(255, 255, 255, 0.1);
     50%{background-position:100% 50%}
     100%{background-position:0% 50%}
 }
-body {
+body, .container, #__nuxt, section {
   overflow: hidden;
+  max-height: 98vh;
 }
 .loading {
   background-color: $med-grey;
