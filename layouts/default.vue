@@ -125,12 +125,13 @@ h2 {
   // hover state isn't reliably triggered on mobile
   -webkit-tap-highlight-color: $primary;
 }
-
-.button--green:hover, .button--green:active {
+.button--green:hover {
   color: #fff;
   background-color: $primary;
 }
-
+.button--green.loading {
+  border: none;
+}
 .button--grey {
   display: inline-block;
   border-radius: 4px;
