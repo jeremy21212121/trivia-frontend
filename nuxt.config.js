@@ -20,6 +20,14 @@ export default {
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }]
   },
   pwa: {
+    manifest: {
+      name: 'Just Trivia',
+      lang: 'en-US',
+      description: 'A mobile trivia game with no ads or tracking',
+      start_page: '/?utm_source=homescreen',
+      background_color: '#1d1d1d',
+      theme_color: '#3b8070'
+    },
     meta: {
       name: 'Just Trivia',
       description: 'A mobile trivia game with no ads or tracking',
