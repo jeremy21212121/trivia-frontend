@@ -22,6 +22,10 @@ $med-white: rgba(255, 255, 255, 0.1);
   color: rgba(255,255,255,0.01) !important;
   transition: all ease 0.5s;
 }
+body, .container, main, section, #__nuxt {
+  overflow: hidden;
+  max-height: 98vh;
+}
 .appear-enter-active {
   animation: 1s appear ease;
 }
