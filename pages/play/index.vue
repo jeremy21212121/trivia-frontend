@@ -86,9 +86,9 @@ body, .container, #__nuxt, section {
       justify-content: flex-start;
       // animation: 1s appear ease;
       // overflow: hidden;
-      svg {
-        // transition: all 250ms ease;
-      }
+      // svg {
+      //   // transition: all 250ms ease;
+      // }
       svg.loading {
         border-radius: 45%;
         // animation: 1s appear ease;

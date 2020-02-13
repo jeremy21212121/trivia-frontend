@@ -22,6 +22,7 @@ export default {
   pwa: {
     manifest: {
       name: 'Just Trivia',
+      short_name: 'Just Trivia',
       lang: 'en-US',
       description: 'A mobile trivia game with no ads or tracking',
       start_page: '/?utm_source=homescreen',
@@ -30,10 +31,14 @@ export default {
     },
     meta: {
       name: 'Just Trivia',
-      description: 'A mobile trivia game with no ads or tracking',
+      description:
+        'A mobile trivia game with no ads or tracking and very little data usage',
       author: 'Jeremy Poole',
-      nativeUI: true
-      // ogHost: 'justtrivia.fun',
+      nativeUI: true,
+      ogHost: 'https://justtrivia.fun',
+      ogSiteName: 'Just Trivia',
+      ogDescription:
+        'A mobile trivia game with no ads or tracking and very little data usage'
     }
   },
   /*
