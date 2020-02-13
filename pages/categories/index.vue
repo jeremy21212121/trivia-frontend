@@ -102,9 +102,11 @@ section {
             {{ obj.displayName }}
           </p>
         </div>
-        <nuxt-link to="/play" :title="gameInProgress ? 'resume game' : 'play'">
-          <RightArrow />
-        </nuxt-link>
+        <transition name="appear" :appear="true">
+          <nuxt-link to="/play" v-show="selectedCategories.length > 0" :title="gameInProgress ? 'resume game' : 'play'">
+            <RightArrow />
+          </nuxt-link>
+        </transition>
     </section>
   </main>
 </template>
