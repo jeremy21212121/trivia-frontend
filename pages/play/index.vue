@@ -22,6 +22,15 @@ $med-white: rgba(255, 255, 255, 0.1);
   color: rgba(255,255,255,0.01) !important;
   transition: all ease 0.5s;
 }
+.appear-enter-active {
+  animation: 1s appear ease;
+}
+.appear-leave-active {
+  animation: 10ms disappear ease;
+}
+.rotate-enter-active {
+  animation: rotate 30s infinite linear, 1s appear ease;
+}
 .container {
   nav {
     position: absolute;
@@ -65,34 +74,38 @@ $med-white: rgba(255, 255, 255, 0.1);
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
-    animation: 1s appear ease;
+    // animation: 1s appear ease;
     transition: all ease 0.5s;
     // &.game {
     //   // justify-content: flex-start;
     // }
     &.result {
       justify-content: flex-start;
+      // animation: 1s appear ease;
       // overflow: hidden;
       svg {
-        transition: all 250ms ease;
+        // transition: all 250ms ease;
       }
       svg.loading {
         border-radius: 45%;
+        // animation: 1s appear ease;
       }
       svg.result-icon {
         width: 85%;
         max-width: 531px;
         margin-top: 64px;
         z-index: 99;
-        animation: appear 0.5s ease;
+        // animation: appear 0.5s ease;
       }
       svg.radial {
         max-width: 531px;
         position: fixed;
         top: 64px;
-        z-index: -1;
-        animation: appear 1s ease;
-        animation:rotate 30s infinite linear;
+        z-index: 1;
+        // opacity: 0;
+        // transition: opacity 2s ease;
+        // animation: appear 1s ease;
+        // animation:rotate 30s infinite linear 500ms;
       }
       p {
         font-size: 28px;
@@ -111,7 +124,7 @@ $med-white: rgba(255, 255, 255, 0.1);
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      animation: 1s appear ease;
+      // animation: 1s appear ease;
       h1.category {
         margin-top: 16px;
         padding: 4px 8px;
@@ -179,6 +192,7 @@ $med-white: rgba(255, 255, 255, 0.1);
       padding: 4px 8px;
       font-size: 20px;
       text-align: center;
+      // animation: 1s appear ease;
       // &.loading {
       //   // line-height: 3em;
       // }
@@ -194,6 +208,7 @@ $med-white: rgba(255, 255, 255, 0.1);
       display: flex;
       flex-direction: column;
       justify-content: space-around;
+      // animation: 1s appear ease;
       li {
         width: 100%;
         // display: block;
@@ -211,82 +226,102 @@ $med-white: rgba(255, 255, 255, 0.1);
 <template>
   <client-only>
     <main class="container">
-      <nav>
-        <ul>
-          <li>
-            <a href="#" @click.prevent="handleBack" title="back to categories">
-              <LeftArrow />
-            </a>
-          </li>
-          <li>
-            <a href="#" @click.prevent="handleClose" title="quit current game">
-              <CloseIcon />
-            </a>
-          </li>
-        </ul>
-      </nav>
-      <section v-if="isPlay" class="game">
-        <div>
-          <!-- mark everything else aria-hidden during loading so screen readers don't read out "Loading" over and over again -->
-          <h1 class="category" title="category" :class="{ loading: isLoading }">
-            <!-- {{ questionData.question.category.toLocaleLowerCase() }} -->
-            {{ currentCategory }}
-          </h1>
-          <component :is="currentCategoryIconComponent" :class="{ loading: isLoading }"/>
-          <h2 class="question-number" :class="{ loading: isLoading }" :aria-hidden="isLoading">
-            Question {{ (questionData) ? questionData.number + 1 : ' ' }}/{{ (questionsPerGame) ? questionsPerGame : '  ' }}
-          </h2>
-          <span :class="{ loading: isLoading, currentDifficulty: !isLoading }" class="difficulty" title="difficulty" :aria-hidden="isLoading">
-            {{ currentDifficulty }}
-          </span>
-        </div>
-        <p :class="{ loading: isLoading }" :aria-hidden="isLoading">
-          {{ (!isLoading && questionObject.question) ? questionObject.question : 'Loading...........................................................................................' }}
-        </p>
-        <ol :aria-hidden="isLoading">
-          <li
-            v-for="(possibleAnswer, index) in currentPossibleAnswers"
-            :key="'option-' + index"
-            :aria-hidden="isLoading"
-          >
-            <a
-              @click.prevent="handleGuess(index)"
-              href="#"
-              class="button--green"
-              :class="{ loading: isLoading }"
-            >
-              {{ possibleAnswer }}
-            </a>
-          </li>
-        </ol>
-      </section>
-      <section
-        v-else-if="isResult"
-        class="result"
-        style="color:rgba(255,255,255,0.7);"
-      >
-        <component v-if="results.active && results.value.isCorrectGuess" class="radial" :is="'RadialIcon'" />
-        <component v-if="!isLoading" class="result-icon" :is="results.value.isCorrectGuess ? 'CorrectIcon' : 'WrongIcon'"/>
-        <component v-else-if="isLoading" class="result-icon loading" :is="'EllipsisIcon'" />
-        <p :class="{ loading: isLoading }">
-          {{ (isLoading || !results.active) ? 'Loading...' : results.value.isCorrectGuess ? 'Correct!' : 'Wrong!' }}
-        </p>
-        <aside
-          v-if="results.active && results.value.gameOver"
-          class="game-over"
+      <transition name="appear" :appear="true">
+          <nav>
+            <ul>
+              <li>
+                <a href="#" @click.prevent="handleBack" title="back to categories">
+                  <LeftArrow />
+                </a>
+              </li>
+              <li>
+                <a href="#" @click.prevent="handleClose" title="quit current game">
+                  <CloseIcon />
+                </a>
+              </li>
+            </ul>
+          </nav>
+      </transition>
+      <transition name="appear" :appear="true">
+        <section v-if="isPlay" class="game" key="playview">
+            <div>
+              <!-- mark everything else aria-hidden during loading so screen readers don't read out "Loading" over and over again -->
+              <h1 class="category" title="category" :class="{ loading: isLoading }">
+                <!-- {{ questionData.question.category.toLocaleLowerCase() }} -->
+                {{ currentCategory }}
+              </h1>
+              <component :is="currentCategoryIconComponent" :class="{ loading: isLoading }"/>
+              <h2 class="question-number" :class="{ loading: isLoading }" :aria-hidden="isLoading">
+                Question {{ (questionData) ? questionData.number + 1 : ' ' }}/{{ (questionsPerGame) ? questionsPerGame : '  ' }}
+              </h2>
+              <span :class="{ loading: isLoading, currentDifficulty: !isLoading }" class="difficulty" title="difficulty" :aria-hidden="isLoading">
+                {{ currentDifficulty }}
+              </span>
+            </div>
+  
+            <p :class="{ loading: isLoading }" :aria-hidden="isLoading">
+              {{ (!isLoading && questionObject && questionObject.question) ? questionObject.question : 'Loading...........................................................................................' }}
+            </p>
+  
+            <ol :aria-hidden="isLoading">
+              <li
+                v-for="(possibleAnswer, index) in currentPossibleAnswers"
+                :key="'option-' + index"
+                :aria-hidden="isLoading"
+              >
+                <a
+                  @click.prevent="handleGuess(index)"
+                  href="#"
+                  class="button--green"
+                  :class="{ loading: isLoading }"
+                >
+                  {{ possibleAnswer }}
+                </a>
+              </li>
+            </ol>
+          <!-- </transition> -->
+        </section>
+        <section
+          v-else-if="isResult"
+          class="result"
+          style="color:rgba(255,255,255,0.7);"
+          key="resultview"
         >
-          <h2>Game Over!</h2>
-          <p>
-            {{ results.value.score }} / {{ questionsPerGame }}
-          </p>
-        </aside>
-        <a @click.prevent="resultNextHandler" :aria-hidden="isLoading" :class="{ loading: isLoading }" href="#" class="button--green">{{ resultButtonText }}</a>
-      </section>
-      <section v-else-if="isError">
-        <!-- error -->
-        <h1>Whoops</h1>
-        <nuxt-link :to="'/categories'">Go back</nuxt-link>
-      </section>
+          <!-- <transition name="appear"> -->
+            <component v-if="isLoading" class="result-icon loading" :is="'EllipsisIcon'" />
+            <component v-else-if="!isLoading" class="result-icon" :is="results.value.isCorrectGuess ? 'CorrectIcon' : 'WrongIcon'"/>
+          <!-- </transition> -->
+          <transition name="rotate" :appear="true">
+            <component v-if="results.active && results.value.isCorrectGuess" class="radial" :is="'RadialIcon'" />
+          </transition>
+          <!-- <transition name="appear"> -->
+            <p :class="{ loading: isLoading }">
+              {{ (isLoading || !results.active) ? 'Loading...' : results.value.isCorrectGuess ? 'Correct!' : 'Wrong!' }}
+            </p>
+          <!-- </transition> -->
+          <!-- <transition name="appear"> -->
+            <aside
+              v-if="results.active && results.value.gameOver"
+              class="game-over"
+            >
+              <h2>Game Over!</h2>
+              <p>
+                {{ results.value.score }} / {{ questionsPerGame }}
+              </p>
+            </aside>
+          <!-- </transition> -->
+          <!-- <transition name="appear"> -->
+            <a @click.prevent="resultNextHandler" :aria-hidden="isLoading" :class="{ loading: isLoading }" href="#" class="button--green">{{ resultButtonText }}</a>
+          <!-- </transition> -->
+        </section>
+        <section v-else-if="isError" key="errorview">
+          <!-- <transition name="appear"> -->
+            <!-- error -->
+            <h1>Whoops</h1>
+            <nuxt-link :to="'/categories'">Go back</nuxt-link>
+          <!-- </transition> -->
+        </section>
+      </transition>
     </main>
   </client-only>
 </template>
@@ -386,7 +421,7 @@ export default {
     apiPost(path, payload, success, fail) {
       this.setIsLoading(true)
       let response
-      fetch('https://api.justtrivia.fun' + path, {
+      fetch('http://192.168.0.10:8765' + path, {
         method: 'POST',
         headers: {
           Accept: 'application/json',
