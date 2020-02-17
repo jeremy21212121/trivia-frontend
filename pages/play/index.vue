@@ -257,7 +257,7 @@ body, .container, #__nuxt, section {
               <h2 class="question-number" :class="{ loading: isLoading }" :aria-hidden="isLoading">
                 Question {{ (questionData) ? questionData.number + 1 : ' ' }}/{{ (questionsPerGame) ? questionsPerGame : '  ' }}
               </h2>
-              <span :class="{ loading: isLoading, currentDifficulty: !isLoading }" class="difficulty" title="difficulty" :aria-hidden="isLoading">
+              <span :class="[ currentDifficulty, { loading: isLoading }]" class="difficulty" title="difficulty" :aria-hidden="isLoading">
                 {{ currentDifficulty }}
               </span>
             </div>
