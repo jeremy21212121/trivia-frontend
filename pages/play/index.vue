@@ -204,7 +204,6 @@ body, .container, main, section, #__nuxt {
 </style>
 
 <template>
-<!-- ignore this comment -->
   <client-only>
     <main class="container">
       <transition name="appear" :appear="true">
