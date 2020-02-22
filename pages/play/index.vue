@@ -14,8 +14,6 @@ $med-white: rgba(255, 255, 255, 0.1);
 
 .loading {
   background-color: $med-grey;
-  // background: linear-gradient(to right, $med-grey, $med-grey 1%, $gris-foncee 2%, $gris-foncee 5%, $med-grey 6%);
-  // background: linear-gradient(270deg, #6a6f6b, #b9bab9, #878787);
   background: linear-gradient(270deg, $med-grey, $gris-brilliant, $med-grey);
   background-size: 600% 600%;
   animation: Loading 2s ease infinite !important;
@@ -50,20 +48,10 @@ body, .container, main, section, #__nuxt {
         margin: 8px;
         a {
           svg {
-            // padding: 4px;
-            // width: 42px;
-            // height: 42px;
-            // background-color: $primary-faint;
-            // border-radius: 25%;
-            // @include bs-white-0;
-            // transition: background-color, box-shadow 100ms ease-in-out;
-            // -webkit-tap-highlight-color: $primary-bright;
             @include nav-button(42px);
           }
           &:hover {
             svg {
-              // background-color: $primary-bright;
-              // box-shadow: none;
               @include nav-button-active;
             }
           }
@@ -80,9 +68,6 @@ body, .container, main, section, #__nuxt {
     align-items: center;
     // animation: 1s appear ease;
     transition: all ease 0.5s;
-    // &.game {
-    //   // justify-content: flex-start;
-    // }
     &.result {
       justify-content: flex-start;
       // animation: 1s appear ease;
@@ -144,10 +129,8 @@ body, .container, main, section, #__nuxt {
       svg {
         width: 25%;
         margin: 6px 0;
-        // padding: 4px;
         border-radius: 4px;
         &.loading {
-          // opacity: 0.5;
           fill-opacity: 0.3;
         }
       }
@@ -186,9 +169,6 @@ body, .container, main, section, #__nuxt {
       display: flex;
       align-items: center;
       color: rgba(255,255,255,0.7);
-      // min-height: 15vh;
-      // margin: 4px 10px;
-      // margin-top: 16px;
       border-radius: 4px;
       line-height: 1.3;
       margin: 5vh 1vw;
@@ -197,9 +177,6 @@ body, .container, main, section, #__nuxt {
       font-size: 20px;
       text-align: center;
       // animation: 1s appear ease;
-      // &.loading {
-      //   // line-height: 3em;
-      // }
     }
     ol {
       width: 100%;
@@ -215,7 +192,6 @@ body, .container, main, section, #__nuxt {
       // animation: 1s appear ease;
       li {
         width: 100%;
-        // display: block;
         margin: 1.5vh 0;
         color: rgba(255,255,255,0.7);
         a {
@@ -251,7 +227,6 @@ body, .container, main, section, #__nuxt {
             <div>
               <!-- mark everything else aria-hidden during loading so screen readers don't read out "Loading" over and over again -->
               <h1 class="category" title="category" :class="{ loading: isLoading }">
-                <!-- {{ questionData.question.category.toLocaleLowerCase() }} -->
                 {{ currentCategory }}
               </h1>
               <component :is="currentCategoryIconComponent" :class="{ loading: isLoading }"/>
@@ -283,7 +258,6 @@ body, .container, main, section, #__nuxt {
                 </a>
               </li>
             </ol>
-          <!-- </transition> -->
         </section>
         <section
           v-else-if="isResult"
@@ -291,19 +265,14 @@ body, .container, main, section, #__nuxt {
           style="color:rgba(255,255,255,0.7);"
           key="resultview"
         >
-          <!-- <transition name="appear"> -->
             <component v-if="isLoading" class="result-icon loading" :is="'EllipsisIcon'" />
             <component v-else-if="!isLoading" class="result-icon" :is="results.value.isCorrectGuess ? 'CorrectIcon' : 'WrongIcon'"/>
-          <!-- </transition> -->
           <transition name="rotate" :appear="true">
             <component v-if="results.active && results.value.isCorrectGuess" class="radial" :is="'RadialIcon'" />
           </transition>
-          <!-- <transition name="appear"> -->
             <p :class="{ loading: isLoading }">
               {{ (isLoading || !results.active) ? 'Loading...' : results.value.isCorrectGuess ? 'Correct!' : 'Wrong!' }}
             </p>
-          <!-- </transition> -->
-          <!-- <transition name="appear"> -->
             <aside
               v-if="results.active && results.value.gameOver"
               class="game-over"
@@ -313,17 +282,11 @@ body, .container, main, section, #__nuxt {
                 {{ results.value.score }} / {{ questionsPerGame }}
               </p>
             </aside>
-          <!-- </transition> -->
-          <!-- <transition name="appear"> -->
             <a @click.prevent="resultNextHandler" :aria-hidden="isLoading" :class="{ loading: isLoading, hover: activeIndex === 0 }" href="#" class="button--green">{{ resultButtonText }}</a>
-          <!-- </transition> -->
         </section>
         <section v-else-if="isError" key="errorview">
-          <!-- <transition name="appear"> -->
-            <!-- error -->
             <h1>Whoops</h1>
             <nuxt-link :to="'/categories'">Go back</nuxt-link>
-          <!-- </transition> -->
         </section>
       </transition>
     </main>
@@ -372,15 +335,12 @@ export default {
     TelevisionIcon: () => import('@/components/icons/television.svg'),
     VehiclesIcon: () => import('@/components/icons/vehicles.svg'),
     VideogamesIcon: () => import('@/components/icons/videogames.svg'),
-    // replace with static imports. they will definitely be needed.
-    CorrectIcon/*: () => import('@/components/icons/correct.svg')*/,
-    WrongIcon/*: () => import('@/components/icons/wrong.svg')*/,
-    RadialIcon/*: () => import('@/components/icons/radial-white.svg')*/
+    CorrectIcon,
+    WrongIcon,
+    RadialIcon
   },
   data() {
     return {
-      // questionData: {},
-      // error: false,
       categoriesArray: _categoriesArray,
       activeIndex: null
     }
@@ -407,16 +367,6 @@ export default {
         this.setGameStage('results')
         this.apiPost('/verify', { guess: guessString}, this.setQuestionAndResults, this.setFetchError) 
       })
-      // this.activeIndex = guessInt
-      // if (window && window.setTimeout) {
-      //   window.setTimeout(() => {
-      //     this.activeIndex = null
-      //     // const guessString = String(guessInt)
-      //     // // set game stage to results for loading animations
-      //     // this.setGameStage('results')
-      //     // this.apiPost('/verify', { guess: guessString}, this.setQuestionAndResults, this.setFetchError)          
-      //   }, 150)
-      // }
     },
     initGame() {
     // checks for game-in-progress to resume or begins a new game
@@ -457,11 +407,7 @@ export default {
           } else {
             fail(true)
           }
-        }
-          // json.success
-          //   ? (success(json))
-          //   : (fail(true))
-        )
+        })
         .catch((e) => (this.setFetchError(e.message)))
     },
     resultNextHandler() {
@@ -506,18 +452,12 @@ export default {
     isResult() {
       return this.game.stage === 'results'
     },
-    // isGameOver() {
-    //   return this.game.stage === 'game-over'
-    // },
     isError() {
       return this.fetchError
     },
     questionObject() {
       return this.questionData.question
     },
-    // isLoading() {
-    //   return this.questionObject === undefined
-    // },
     currentCategory() {
       return (!this.isLoading && this.questionObject) ? this.questionObject.category : 'Loading...'
     },
@@ -526,7 +466,7 @@ export default {
     },
     currentCategoryIconComponent() {
       let componentName = 'EllipsisIcon'
-      // we will use the anycategory icon when loading
+      // we will use the ellipsis icon when loading
       if (this.questionObject && !this.isLoading) {
         const svgComponent = this.categoriesArray.find(obj => obj.apiName === this.questionObject.category)
         if (svgComponent) {
