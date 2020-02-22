@@ -203,6 +203,7 @@ body, .container, #__nuxt, section {
 </style>
 
 <template>
+<!-- ignore this comment -->
   <client-only>
     <main class="container">
       <transition name="appear" :appear="true">
