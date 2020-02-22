@@ -5,7 +5,12 @@
       <h1 class="title">just trivia</h1>
       <h2 class="subtitle">no nonsense</h2>
     </section>
-    <nuxt-link :to="'/categories'" class="button--green">Let's play!</nuxt-link>
+    <a
+      href="'/categories'"
+      @click.prevent="() => { setActiveIndex(0, () => { $router.push('/categories') }) }"
+      class="button--green"
+      :class="{ hover: activeIndex === 0 }"
+    >Let's play!</a>
   </main>
 </template>
 
@@ -15,6 +20,24 @@ import Logo from '~/components/Logo.vue'
 export default {
   components: {
     Logo
+  },
+  data() {
+    return {
+      activeIndex: null
+    }
+  },
+  methods: {
+    setActiveIndex(index, cb) {
+      if (window && window.setTimeout) {
+        this.activeIndex = index
+        window.setTimeout(() => {
+          this.activeIndex = null
+          if (cb && (typeof cb === 'function')) {
+            cb()
+          }
+        }, 150)
+      }
+    },
   }
 }
 </script>

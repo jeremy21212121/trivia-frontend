@@ -123,8 +123,9 @@ h2 {
   transition: background-color, color 100ms ease-in-out;
   // hover state isn't reliably triggered on mobile
   -webkit-tap-highlight-color: $primary;
+  transition: background-color 150ms ease;
 }
-.button--green:hover {
+.button--green.hover {
   color: #fff;
   background-color: $primary;
 }

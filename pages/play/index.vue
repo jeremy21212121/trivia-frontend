@@ -276,7 +276,7 @@ body, .container, #__nuxt, section {
                   @click.prevent="handleGuess(index)"
                   href="#"
                   class="button--green"
-                  :class="{ loading: isLoading }"
+                  :class="[{ hover: activeIndex === index }, { loading: isLoading }]"
                 >
                   {{ possibleAnswer }}
                 </a>
@@ -314,7 +314,7 @@ body, .container, #__nuxt, section {
             </aside>
           <!-- </transition> -->
           <!-- <transition name="appear"> -->
-            <a @click.prevent="resultNextHandler" :aria-hidden="isLoading" :class="{ loading: isLoading }" href="#" class="button--green">{{ resultButtonText }}</a>
+            <a @click.prevent="resultNextHandler" :aria-hidden="isLoading" :class="{ loading: isLoading, hover: activeIndex === 0 }" href="#" class="button--green">{{ resultButtonText }}</a>
           <!-- </transition> -->
         </section>
         <section v-else-if="isError" key="errorview">
@@ -380,27 +380,42 @@ export default {
     return {
       // questionData: {},
       // error: false,
-      categoriesArray: _categoriesArray
+      categoriesArray: _categoriesArray,
+      activeIndex: null
     }
   },
   methods: {
     ...mapActions(['setQuestionData', 'clearQuestionData', 'setFetchError', 'setQuestionAndResults', 'setResults', 'clearResults', 'setGameStage', 'setIsLoading']),
-    // getCategorySvgComponent(apiName) {
-    //   // we will use the anycategory icon when loading
-    //   const categoryApiName = !this.isLoading ? apiName : 'Any Category'
-    //   const svgComponent = _categoriesArray.find(obj => obj.apiName === apiName)
-
-    //   // the component name or an empty string if we didn't find a match.
-    //   // Passing an empty string as the 'is' prop to the generic 'component' component will result in no component being rendered, which is acceptable error behaviour.
-    //   const componentName = svgComponent ? svgComponent.componentName : ''
-    //   return componentName
-    // },
+    setActiveIndex(index, cb) {
+      if (window && window.setTimeout) {
+        this.activeIndex = index
+        window.setTimeout(() => {
+          this.activeIndex = null
+          if (cb && (typeof cb === 'function')) {
+            cb()
+          }
+        }, 150)
+      }
+    },
     handleGuess(guessInt) {
       if (this.isLoading) { return }
-      const guessString = String(guessInt)
-      // set game stage to results for loading animations
-      this.setGameStage('results')
-      this.apiPost('/verify', { guess: guessString}, this.setQuestionAndResults, this.setFetchError)
+      // emulates :active state in a more reliable manner across devices
+      this.setActiveIndex(guessInt, () => {
+        const guessString = String(guessInt)
+        // set game stage to results for loading animations
+        this.setGameStage('results')
+        this.apiPost('/verify', { guess: guessString}, this.setQuestionAndResults, this.setFetchError) 
+      })
+      // this.activeIndex = guessInt
+      // if (window && window.setTimeout) {
+      //   window.setTimeout(() => {
+      //     this.activeIndex = null
+      //     // const guessString = String(guessInt)
+      //     // // set game stage to results for loading animations
+      //     // this.setGameStage('results')
+      //     // this.apiPost('/verify', { guess: guessString}, this.setQuestionAndResults, this.setFetchError)          
+      //   }, 150)
+      // }
     },
     initGame() {
     // checks for game-in-progress to resume or begins a new game
@@ -449,24 +464,19 @@ export default {
         .catch((e) => (this.setFetchError(e.message)))
     },
     resultNextHandler() {
-      if (!this.results.value.gameOver) {
-        this.setResults({ active: false }) // clear results to play next question
-        this.setGameStage('play') // play next question
-      } else {
-        // clean up
-        this.clearResults()
-        this.setGameStage(null)
-        // game is over, go back to categories
-        this.$router.push('/categories')
-      }
+      this.setActiveIndex(0, () => {
+        if (!this.results.value.gameOver) {
+          this.setResults({ active: false }) // clear results to play next question
+          this.setGameStage('play') // play next question
+        } else {
+          // clean up
+          this.clearResults()
+          this.setGameStage(null)
+          // game is over, go back to categories
+          this.$router.push('/categories')
+        }
+      })
     },
-    // resultButtonText(results) {
-    //   if (results.value.gameOver) {
-    //     return 'New Game'
-    //   } else {
-    //     return 'Next'
-    //   }
-    // },
     handleBack() {
       if (this.game.stage === 'game-over') {
         // clear results and game stage on back
@@ -510,6 +520,9 @@ export default {
     currentCategory() {
       return (!this.isLoading && this.questionObject) ? this.questionObject.category : 'Loading...'
     },
+    currentQuestionType() {
+      return (this.questionObject && this.questionObject.type) ? this.questionObject.type : ''
+    },
     currentCategoryIconComponent() {
       let componentName = 'EllipsisIcon'
       // we will use the anycategory icon when loading
@@ -538,7 +551,7 @@ export default {
       } else {
         return 'Next'
       }
-    },
+    }
   }
 }
 </script>
