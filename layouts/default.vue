@@ -73,7 +73,6 @@ html {
   max-width: 1280px;
   display: flex;
   flex-direction: column;
-  // justify-content: space-evenly;
   @include space-evenly-hack; // simulates `justify-content: space-evenly` because ios safari sucks
   align-items: center;
   text-align: center;
@@ -98,7 +97,6 @@ h1 {
 
 h1.title {
   font-size: 32px;
-  // color: #3F3D56;
   color: $primary;
   margin: 10px 0;
   text-shadow: 0 0px 2px rgba(255,255,255,0.16),
