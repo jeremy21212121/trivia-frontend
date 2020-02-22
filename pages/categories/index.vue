@@ -49,20 +49,9 @@ section {
     }
   }
   a {
-    // @include bs-black-3;
-    // border: 1px solid rgba(255, 255, 255, 0.1);
-    // border-radius: 100%;
-    // background-color: #7BBD00;
     position: fixed;
     bottom: 30px;
     right: 5%;
-    // width: 60px;
-    // height: 60px;
-    // line-height: 60px;
-    // display: flex;
-    // justify-content: center;
-    // align-items: center;
-    // color: rgba(255, 255, 255, 0.75);
     text-decoration: none;
     font-weight: bold;
     font-size: 40px;
@@ -80,8 +69,6 @@ section {
     }
   }
 }
-// @media screen and (min-width: 450px){
-// }
 </style>
 
 <template>
@@ -123,7 +110,6 @@ import AnyIcon from '@/components/icons/any.svg'
 import ArtIcon from '@/components/icons/art.svg'
 import BoardgamesIcon from '@/components/icons/boardgames.svg'
 import BooksIcon from '@/components/icons/books.svg'
-// import CancelIcon from '@/components/icons/cancel.svg'
 import CartoonsIcon from '@/components/icons/cartoons.svg'
 import CelebritiesIcon from '@/components/icons/celebrities.svg'
 import ComicsIcon from '@/components/icons/comics.svg'
