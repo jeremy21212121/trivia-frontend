@@ -73,6 +73,13 @@ body, .container, #__nuxt, section {
     transition: all ease 0.5s;
     &.result {
       justify-content: flex-start;
+      a {
+        opacity: 1;
+        transition: opacity 250ms linear;
+        &.fadeOut {
+          opacity: 0;
+        }
+      }
       svg.loading {
         border-radius: 45%;
         animation: 500ms appear;
@@ -272,7 +279,7 @@ body, .container, #__nuxt, section {
                 {{ results.value.score }} / {{ questionsPerGame }}
               </p>
             </aside>
-            <a @click.prevent="resultNextHandler" :aria-hidden="isLoading" :class="{ loading: isLoading, hover: activeIndex === 0 }" href="#" class="button--green">{{ resultButtonText }}</a>
+            <a @click.prevent="resultNextHandler" :aria-hidden="isLoading" :class="{ fadeOut, loading: isLoading, hover: activeIndex === 0 }" href="#" class="button--green">{{ resultButtonText }}</a>
         </section>
         <section v-else-if="isError" key="errorview">
             <h1>Whoops</h1>
@@ -402,9 +409,11 @@ export default {
     },
     resultNextHandler() {
       this.setActiveIndex(0, () => {
+        this.fadeOut = true
         if (!this.results.value.gameOver) {
           this.setResults({ active: false }) // clear results to play next question
           this.setGameStage('play') // play next question
+          this.fadeOut = false
         } else {
           // clean up
           this.clearResults()
