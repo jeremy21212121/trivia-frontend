@@ -7,7 +7,7 @@ section {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  animation: appear 1s;
+  animation: appear 300ms;
   div.cat-box {
     @include bs-white-0;
     margin: 4px;
@@ -89,11 +89,9 @@ section {
             {{ obj.displayName }}
           </p>
         </div>
-        <transition name="appear" :appear="true">
-          <nuxt-link to="/play" v-show="selectedCategories.length > 0" :title="gameInProgress ? 'resume game' : 'play'">
-            <RightArrow />
-          </nuxt-link>
-        </transition>
+        <nuxt-link to="/play" v-show="selectedCategories.length > 0" :title="gameInProgress ? 'resume game' : 'play'">
+          <RightArrow />
+        </nuxt-link>
     </section>
   </main>
 </template>
