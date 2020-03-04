@@ -6,7 +6,7 @@ $med-grey: rgba(170, 170, 170, 0.1);
 $gris-brilliant: rgba(190, 190, 190, 0.2);
 $med-white: rgba(255, 255, 255, 0.1);
 
-@keyframes Loading {
+@keyframes loading {
     0%{background-position:0% 50%}
     50%{background-position:100% 50%}
     100%{background-position:0% 50%}
@@ -19,7 +19,7 @@ body, .container, #__nuxt, section {
   background-color: $med-grey;
   background: linear-gradient(270deg, $med-grey, $gris-brilliant, $med-grey);
   background-size: 600% 600%;
-  animation: Loading 2s ease infinite !important;
+  animation: loading 2s ease infinite !important;
   color: rgba(255,255,255,0.01) !important;
   transition: all ease 0.5s;
 }
@@ -29,14 +29,18 @@ body, .container, #__nuxt, section {
 .appear-leave-active {
   animation: 10ms disappear ease;
 }
-.rotate-enter-active {
-  animation: rotate 30s infinite linear, 1s appear ease;
-}
 .container {
+  animation: appear 1s;
   nav {
     position: absolute;
     margin: 0;
     width: 100%;
+    animation: appear 1s;
+    opacity: 1;
+    transition: opacity 250ms linear;
+    &.fadeOut {
+      opacity: 0;
+    }
     ul {
       list-style-type: none;
       margin: 0;
@@ -65,35 +69,27 @@ body, .container, #__nuxt, section {
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
-    // animation: 1s appear ease;
+    animation: 1s appear;
     transition: all ease 0.5s;
     &.result {
       justify-content: flex-start;
-      // animation: 1s appear ease;
-      // overflow: hidden;
-      // svg {
-      //   // transition: all 250ms ease;
-      // }
       svg.loading {
         border-radius: 45%;
-        // animation: 1s appear ease;
+        animation: 500ms appear;
       }
       svg.result-icon {
         width: 85%;
         max-width: 531px;
         margin-top: 64px;
         z-index: 99;
-        // animation: appear 0.5s ease;
+        animation: appear 0.5s;
       }
       svg.radial {
         max-width: 531px;
         position: fixed;
         top: 64px;
         z-index: 1;
-        // opacity: 0;
-        // transition: opacity 2s ease;
-        // animation: appear 1s ease;
-        // animation:rotate 30s infinite linear 500ms;
+        animation: rotate 30s infinite linear, 1s appear ease;
       }
       p {
         font-size: 28px;
@@ -205,23 +201,20 @@ body, .container, #__nuxt, section {
 <template>
   <client-only>
     <main class="container">
-      <transition name="appear" :appear="true">
-          <nav>
-            <ul>
-              <li>
-                <a href="#" @click.prevent="handleBack" title="back to categories">
-                  <LeftArrow />
-                </a>
-              </li>
-              <li>
-                <a href="#" @click.prevent="handleClose" title="quit current game">
-                  <CloseIcon />
-                </a>
-              </li>
-            </ul>
-          </nav>
-      </transition>
-      <transition name="appear" :appear="true">
+        <nav :class="{ fadeOut }">
+          <ul>
+            <li>
+              <a href="#" @click.prevent="handleBack" title="back to categories">
+                <LeftArrow />
+              </a>
+            </li>
+            <li>
+              <a href="#" @click.prevent="handleClose" title="quit current game">
+                <CloseIcon />
+              </a>
+            </li>
+          </ul>
+        </nav>
         <section v-if="isPlay" class="game" key="playview">
             <div>
               <!-- mark everything else aria-hidden during loading so screen readers don't read out "Loading" over and over again -->
@@ -266,9 +259,7 @@ body, .container, #__nuxt, section {
         >
             <component v-if="isLoading" class="result-icon loading" :is="'EllipsisIcon'" />
             <component v-else-if="!isLoading" class="result-icon" :is="results.value.isCorrectGuess ? 'CorrectIcon' : 'WrongIcon'"/>
-          <transition name="rotate" :appear="true">
             <component v-if="results.active && results.value.isCorrectGuess" class="radial" :is="'RadialIcon'" />
-          </transition>
             <p :class="{ loading: isLoading }">
               {{ (isLoading || !results.active) ? 'Loading...' : results.value.isCorrectGuess ? 'Correct!' : 'Wrong!' }}
             </p>
@@ -287,7 +278,6 @@ body, .container, #__nuxt, section {
             <h1>Whoops</h1>
             <nuxt-link :to="'/categories'">Go back</nuxt-link>
         </section>
-      </transition>
     </main>
   </client-only>
 </template>
@@ -341,7 +331,8 @@ export default {
   data() {
     return {
       categoriesArray: _categoriesArray,
-      activeIndex: null
+      activeIndex: null,
+      fadeOut: false
     }
   },
   methods: {
@@ -433,6 +424,7 @@ export default {
       this.$router.push('/categories')
     },
     handleClose() {
+      this.fadeOut = true
       this.clearQuestionData()
       this.clearResults()
       this.setGameStage(null)
