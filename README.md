@@ -16,7 +16,7 @@ In the near future, I will include the db and server logic in a service worker t
 
 ## Why?
 
-I wanted a simple, ad-free trivia web app to play on my phone. I couldn't find one that I liked, so I [made one](https://github.com/jeremy21212121/trivia) a couple years ago. It has some limitations, but mostly I really wanted multiple arbitrary categories per game. Instead of making the client increasingly complex, I split this game into a REST-ish backend and a simpler client. Once this frontend is done, I want to make one with native script.
+I wanted a simple, ad-free trivia web app to play on my phone. I couldn't find one that I liked, so I [made one](https://github.com/jeremy21212121/trivia) a couple years ago. It has some limitations, but mostly I really wanted multiple arbitrary categories per game. Instead of making the client increasingly complex, I split this game into a REST-ish backend and a simpler client.
 
 ## Technical overview
 

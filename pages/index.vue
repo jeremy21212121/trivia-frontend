@@ -10,7 +10,7 @@
     </span>
     <div class="play" :class="{ fadeOut }">
       <a
-        href="'/categories'"
+        href="/categories"
         @click.prevent="() => { fadeOut = true; setActiveIndex(0, () => { $router.push('/categories') }) }"
         class="button--green"
         :class="{ hover: activeIndex === 0 }"
