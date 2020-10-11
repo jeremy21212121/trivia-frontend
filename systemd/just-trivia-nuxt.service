@@ -16,3 +16,6 @@ User=ubuntu
 Group=ubuntu
 Environment="NUXT_PORT=3000"
 
+[Install]
+WantedBy=multi-user.target
+
