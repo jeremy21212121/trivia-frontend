@@ -4,8 +4,11 @@
   </div>
 </template>
 <script>
-import { mapActions, mapState } from 'vuex';
+import { mapActions, mapState } from 'vuex'
 export default {
+  computed: {
+    ...mapState(['supportsLocalStorage'])
+  },
   created() {
     // set localStorage support and populate state from localStorage
     // we want this to run once per app load, client-side only, as early as possible
@@ -44,9 +47,6 @@ export default {
         }
       }
     }
-  },
-  computed: {
-    ...mapState(['supportsLocalStorage'])
   }
 }
 </script>
@@ -99,8 +99,8 @@ h1.title {
   font-size: 32px;
   color: $primary;
   margin: 10px 0;
-  text-shadow: 0 0px 2px rgba(255,255,255,0.16),
-              0 0px 2px rgba(255,255,255,0.23);
+  text-shadow: 0 0px 2px rgba(255, 255, 255, 0.16),
+    0 0px 2px rgba(255, 255, 255, 0.23);
 }
 
 h2 {
@@ -118,7 +118,7 @@ h2 {
   color: $primary;
   text-decoration: none;
   padding: 10px 30px;
-  background-color: rgba(0,0,0,0);
+  background-color: rgba(0, 0, 0, 0);
   transition: background-color, color 100ms ease;
   // hover state isn't reliably triggered on mobile
   -webkit-tap-highlight-color: $primary;
@@ -169,7 +169,11 @@ h2 {
   }
 }
 @keyframes rotate {
-    from {transform:rotate(0deg);}
-    to {transform:rotate(360deg);}
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 </style>
