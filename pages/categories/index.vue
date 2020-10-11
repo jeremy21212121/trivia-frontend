@@ -60,7 +60,8 @@ section {
       @include bs-white-1;
       background-color: $primary;
     }
-    &:hover, &:active {
+    &:hover,
+    &:active {
       svg {
         @include nav-button-active;
         @include bs-white-0b;
@@ -72,26 +73,32 @@ section {
 </style>
 
 <template>
-  <!-- eslint-disable -->
-  <!-- spent two hours debugging some eslint bullshit -->
+  <!-- There was formerly an angry comment about disabling eslint here -->
+  <!-- Having forgotten the original trauma, a shall put myself thru it all over again -->
   <main class="container">
     <h1 class="title">select your categories</h1>
     <section class="categories">
-        <div
-          v-for="obj in categoriesArray"
-          :key="'cat-' + obj.key"
-          @click="handleCategoryClick(obj.key)"
-          :class="{ active: isSelected(obj.key), disabled: isDisabled(obj.key) }"
-          class='cat-box'
-        >
-          <component :is="obj.componentName" />
-          <p>
-            {{ obj.displayName }}
-          </p>
-        </div>
-        <nuxt-link to="/play" v-show="selectedCategories.length > 0" :title="gameInProgress ? 'resume game' : 'play'">
-          <RightArrow />
-        </nuxt-link>
+      <div
+        v-for="obj in categoriesArray"
+        :key="'cat-' + obj.key"
+        @click="handleCategoryClick(obj.key)"
+        :class="{ active: isSelected(obj.key), disabled: isDisabled(obj.key) }"
+        class="cat-box"
+      >
+        <!-- eslint seems intent on gaslighting me. There is a v-bind:is on that line, so I dunno. I tried using the long-form syntax but that didnt help either -->
+        <!-- eslint-disable-next-line vue/require-component-is -->
+        <component :is="obj.componentName" />
+        <p>
+          {{ obj.displayName }}
+        </p>
+      </div>
+      <nuxt-link
+        v-show="selectedCategories.length > 0"
+        :title="gameInProgress ? 'resume game' : 'play'"
+        to="/play"
+      >
+        <RightArrow />
+      </nuxt-link>
     </section>
   </main>
 </template>
@@ -170,9 +177,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions([
-      'setCategories'
-    ]),
+    ...mapActions(['setCategories']),
     isSelected(key) {
       return this.selectedCategories.includes(key)
     },
@@ -192,13 +197,14 @@ export default {
       const alreadyExists = this.selectedCategories.includes(key)
       const disabled = this.isDisabled(key)
       const isAny = key === 'any'
-      let output = [];
-      if ((isAny && !alreadyExists || disabled)) {
+      let output = []
+      if ((isAny && !alreadyExists) || disabled) {
         output.push(key)
       } else if (isAny && alreadyExists) {
-        () => {} //noop
+        // prettier does wierd stuff
+        ;(() => {})() //noop
       } else if (!disabled && alreadyExists) {
-        output.push(...this.selectedCategories.filter(val => val !== key))
+        output.push(...this.selectedCategories.filter((val) => val !== key))
       } else if (!disabled) {
         output.push(...this.selectedCategories, key)
       }
