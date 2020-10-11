@@ -119,10 +119,10 @@ h2 {
   text-decoration: none;
   padding: 10px 30px;
   background-color: rgba(0,0,0,0);
-  transition: background-color, color 100ms ease-in-out;
+  transition: background-color, color 100ms ease;
   // hover state isn't reliably triggered on mobile
   -webkit-tap-highlight-color: $primary;
-  transition: background-color 150ms ease;
+  // transition: background-color 150ms ease;
 }
 .button--green.hover {
   color: #fff;
@@ -158,6 +158,14 @@ h2 {
   }
   100% {
     opacity: 0;
+  }
+}
+@keyframes partial-appear {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0.5;
   }
 }
 @keyframes rotate {

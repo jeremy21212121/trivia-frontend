@@ -51,7 +51,7 @@ export default {
           if (cb && (typeof cb === 'function')) {
             cb()
           }
-        }, 100)
+        }, 50)
       }
     },
   }
@@ -61,7 +61,7 @@ export default {
 <style lang="scss" scoped>
 @import '@/scss/colors.scss';
 main.container {
-  animation: appear 1s;
+  animation: appear 300ms;
   .fadeOut {
     opacity: 0 !important;
   }
@@ -80,7 +80,7 @@ main.container {
   div.play {
     flex-grow: 1;
     opacity: 1;
-    transition: opacity 250ms linear 250ms;
+    transition: opacity 250ms linear;
   }
   span.description {
     font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,

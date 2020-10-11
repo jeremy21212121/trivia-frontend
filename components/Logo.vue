@@ -111,6 +111,6 @@ svg {
   /* margin-top: 32px; */
   width: 65%;
   /* opacity: 0; */
-  animation: 1s appear;
+  /* animation: 1s appear; */
 }
 </style>

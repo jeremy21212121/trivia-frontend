@@ -7,7 +7,7 @@ section {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  animation: appear 300ms;
+  animation: appear 200ms;
   div.cat-box {
     @include bs-white-0;
     margin: 4px;
@@ -24,7 +24,7 @@ section {
     align-items: center;
     border-radius: 3px;
     border: 1px solid $white-ulite;
-    transition: all ease-in-out 190ms;
+    transition: all ease 190ms;
     &.active {
       border-color: $white-light;
       @include bs-white-0b;

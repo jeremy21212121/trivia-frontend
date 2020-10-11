@@ -18,25 +18,27 @@ $med-white: rgba(255, 255, 255, 0.1);
   background-size: 600% 600%;
   animation: loading 2s ease infinite !important;
   color: rgba(255,255,255,0.01) !important;
-  transition: all ease 0.5s;
+  transition: all ease 300ms;
+  opacity: 0.5;
+  animation: 300ms partial-appear;
 }
 body, .container, main, section, #__nuxt {
   overflow: hidden;
   max-height: 98vh;
 }
-.appear-enter-active {
-  animation: 1s appear ease;
-}
-.appear-leave-active {
-  animation: 10ms disappear ease;
-}
+// .appear-enter-active {
+//   animation: 1s appear ease;
+// }
+// .appear-leave-active {
+//   animation: 10ms disappear ease;
+// }
 .container {
-  animation: appear 1s;
+  animation: 300ms appear;
   nav {
     position: absolute;
     margin: 0;
     width: 100%;
-    animation: appear 1s;
+    animation: 300ms appear;
     opacity: 1;
     transition: opacity 250ms linear;
     &.fadeOut {
@@ -70,39 +72,42 @@ body, .container, main, section, #__nuxt {
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
-    animation: 1s appear;
+    animation: 300ms appear;
     transition: all ease 0.5s;
     &.result {
+      animation: none;
       justify-content: flex-start;
       a {
         opacity: 1;
         transition: opacity 250ms linear;
+        animation: 300ms appear;
         &.fadeOut {
           opacity: 0;
         }
       }
       svg.loading {
-        border-radius: 45%;
-        animation: 500ms appear;
+        border-radius: 15%;
+        animation: 300ms partial-appear;
       }
       svg.result-icon {
         width: 85%;
         max-width: 531px;
         margin-top: 64px;
         z-index: 99;
-        animation: appear 0.5s;
+        animation: appear 200ms cubic-bezier(0.165, 0.84, 0.44, 1);
       }
       svg.radial {
         max-width: 531px;
         position: fixed;
         top: 64px;
         z-index: 1;
-        animation: rotate 30s infinite linear, 1s appear ease;
+        animation: rotate 30s infinite linear, 500ms appear linear;
       }
       p {
         font-size: 28px;
         text-shadow: 0 0px 2px rgba(255,255,255,0.16),
                     0 0px 2px rgba(255,255,255,0.23);
+        animation: 300ms appear;
       }
       a {
         margin: auto 0;
@@ -267,7 +272,7 @@ body, .container, main, section, #__nuxt {
         >
             <component v-if="isLoading" class="result-icon loading" :is="'EllipsisIcon'" />
             <component v-else-if="!isLoading" class="result-icon" :is="results.value.isCorrectGuess ? 'CorrectIcon' : 'WrongIcon'"/>
-            <component v-if="results.active && results.value.isCorrectGuess" class="radial" :is="'RadialIcon'" />
+            <component v-if="results.active && results.value.isCorrectGuess && !isLoading" class="radial" :is="'RadialIcon'" />
             <p :class="{ loading: isLoading }">
               {{ (isLoading || !results.active) ? 'Loading...' : results.value.isCorrectGuess ? 'Correct!' : 'Wrong!' }}
             </p>
