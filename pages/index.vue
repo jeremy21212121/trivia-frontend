@@ -110,7 +110,8 @@ main.container {
       a {
         display: block;
         img {
-          background-color: $grey-faint;
+          width: 34px;
+          height: 34px;
           border-radius: 50%;
           padding: 1px;
         }
