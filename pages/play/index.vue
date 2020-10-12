@@ -7,9 +7,15 @@ $gris-brilliant: rgba(190, 190, 190, 0.2);
 $med-white: rgba(255, 255, 255, 0.1);
 
 @keyframes loading {
-    0%{background-position:0% 50%}
-    50%{background-position:100% 50%}
-    100%{background-position:0% 50%}
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 .loading {
@@ -17,12 +23,16 @@ $med-white: rgba(255, 255, 255, 0.1);
   background: linear-gradient(270deg, $med-grey, $gris-brilliant, $med-grey);
   background-size: 600% 600%;
   animation: loading 2s ease infinite !important;
-  color: rgba(255,255,255,0.01) !important;
+  color: rgba(255, 255, 255, 0.01) !important;
   transition: all ease 300ms;
   opacity: 0.5;
   animation: 300ms partial-appear;
 }
-body, .container, main, section, #__nuxt {
+body,
+.container,
+main,
+section,
+#__nuxt {
   overflow: hidden;
   max-height: 98vh;
 }
@@ -105,8 +115,8 @@ body, .container, main, section, #__nuxt {
       }
       p {
         font-size: 28px;
-        text-shadow: 0 0px 2px rgba(255,255,255,0.16),
-                    0 0px 2px rgba(255,255,255,0.23);
+        text-shadow: 0 0px 2px rgba(255, 255, 255, 0.16),
+          0 0px 2px rgba(255, 255, 255, 0.23);
         animation: 300ms appear;
       }
       a {
@@ -126,11 +136,11 @@ body, .container, main, section, #__nuxt {
         margin-top: 16px;
         padding: 4px 8px;
         border-radius: 4px;
-        color: rgba(255,255,255,0.7);
+        color: rgba(255, 255, 255, 0.7);
         font-size: 24px;
         text-transform: capitalize;
         &.loading {
-          color: rgba(255,255,255,0.7) !important;
+          color: rgba(255, 255, 255, 0.7) !important;
           width: 66%;
         }
       }
@@ -147,7 +157,7 @@ body, .container, main, section, #__nuxt {
         border-radius: 4px;
       }
       .question-number {
-        color: rgba(255,255,255,0.7);
+        color: rgba(255, 255, 255, 0.7);
         font-size: 18px;
         padding-bottom: 4px;
         margin-top: 16px;
@@ -155,7 +165,7 @@ body, .container, main, section, #__nuxt {
       .difficulty {
         display: block;
         width: 25%;
-        color: rgba(255,255,255,0.7);
+        color: rgba(255, 255, 255, 0.7);
         padding: 4px 8px;
         margin: 6px auto;
         border-radius: 4px;
@@ -176,7 +186,7 @@ body, .container, main, section, #__nuxt {
     p {
       display: flex;
       align-items: center;
-      color: rgba(255,255,255,0.7);
+      color: rgba(255, 255, 255, 0.7);
       border-radius: 4px;
       line-height: 1.3;
       margin: 5vh 1vw;
@@ -201,7 +211,7 @@ body, .container, main, section, #__nuxt {
       li {
         width: 100%;
         margin: 1.5vh 0;
-        color: rgba(255,255,255,0.7);
+        color: rgba(255, 255, 255, 0.7);
         a {
           width: 66%;
         }
@@ -212,95 +222,143 @@ body, .container, main, section, #__nuxt {
 </style>
 
 <template>
+  <!-- Seems to have a problem identifying v-bind:is / :is attribute. It's there, linter is confused -->
+  <!-- eslint-disable vue/require-component-is -->
   <client-only>
     <main class="container">
-        <nav :class="{ fadeOut }">
-          <ul>
-            <li>
-              <a href="#" @click.prevent="handleBack" title="back to categories">
-                <LeftArrow />
-              </a>
-            </li>
-            <li>
-              <a href="#" @click.prevent="handleClose" title="quit current game">
-                <CloseIcon />
-              </a>
-            </li>
-          </ul>
-        </nav>
-        <section v-if="isPlay" class="game" key="playview">
-            <div>
-              <!-- mark everything else aria-hidden during loading so screen readers don't read out "Loading" over and over again -->
-              <h1 class="category" title="category" :class="{ loading: isLoading }">
-                {{ currentCategory }}
-              </h1>
-              <component :is="currentCategoryIconComponent" :class="{ loading: isLoading }"/>
-              <h2 class="question-number" :class="{ loading: isLoading }" :aria-hidden="isLoading">
-                Question {{ (questionData) ? questionData.number + 1 : ' ' }}/{{ (questionsPerGame) ? questionsPerGame : '  ' }}
-              </h2>
-              <span :class="[ currentDifficulty, { loading: isLoading }]" class="difficulty" title="difficulty" :aria-hidden="isLoading">
-                {{ currentDifficulty }}
-              </span>
-            </div>
-  
-            <p :class="{ loading: isLoading }" :aria-hidden="isLoading">
-              {{ (!isLoading && questionObject && questionObject.question) ? questionObject.question : 'Loading...........................................................................................' }}
-            </p>
-  
-            <ol :aria-hidden="isLoading">
-              <li
-                v-for="(possibleAnswer, index) in currentPossibleAnswers"
-                :key="'option-' + index"
-                :aria-hidden="isLoading"
-              >
-                <a
-                  @click.prevent="handleGuess(index)"
-                  href="#"
-                  class="button--green"
-                  :class="[{ hover: activeIndex === index }, { loading: isLoading }]"
-                >
-                  {{ possibleAnswer }}
-                </a>
-              </li>
-            </ol>
-        </section>
-        <section
-          v-else-if="isResult"
-          class="result"
-          style="color:rgba(255,255,255,0.7);"
-          key="resultview"
-        >
-            <component v-if="isLoading" class="result-icon loading" :is="'EllipsisIcon'" />
-            <component v-else-if="!isLoading" class="result-icon" :is="results.value.isCorrectGuess ? 'CorrectIcon' : 'WrongIcon'"/>
-            <component v-if="results.active && results.value.isCorrectGuess && !isLoading" class="radial" :is="'RadialIcon'" />
-            <p :class="{ loading: isLoading }">
-              {{ (isLoading || !results.active) ? 'Loading...' : results.value.isCorrectGuess ? 'Correct!' : 'Wrong!' }}
-            </p>
-            <aside
-              v-if="results.active && results.value.gameOver"
-              class="game-over"
+      <nav :class="{ fadeOut }">
+        <ul>
+          <li>
+            <a @click.prevent="handleBack" href="#" title="back to categories">
+              <LeftArrow />
+            </a>
+          </li>
+          <li>
+            <a @click.prevent="handleClose" href="#" title="quit current game">
+              <CloseIcon />
+            </a>
+          </li>
+        </ul>
+      </nav>
+      <section key="playview" v-if="isPlay" class="game">
+        <div>
+          <!-- mark everything else aria-hidden during loading so screen readers don't read out "Loading" over and over again -->
+          <h1 :class="{ loading: isLoading }" class="category" title="category">
+            {{ currentCategory }}
+          </h1>
+          <component
+            :is="currentCategoryIconComponent"
+            :class="{ loading: isLoading }"
+          />
+          <h2
+            :class="{ loading: isLoading }"
+            :aria-hidden="isLoading"
+            class="question-number"
+          >
+            Question {{ questionData ? questionData.number + 1 : ' ' }}/{{
+              questionsPerGame ? questionsPerGame : '  '
+            }}
+          </h2>
+          <span
+            :class="[currentDifficulty, { loading: isLoading }]"
+            :aria-hidden="isLoading"
+            class="difficulty"
+            title="difficulty"
+          >
+            {{ currentDifficulty }}
+          </span>
+        </div>
+
+        <p :class="{ loading: isLoading }" :aria-hidden="isLoading">
+          {{
+            !isLoading && questionObject && questionObject.question
+              ? questionObject.question
+              : 'Loading...........................................................................................'
+          }}
+        </p>
+
+        <ol :aria-hidden="isLoading">
+          <li
+            v-for="(possibleAnswer, index) in currentPossibleAnswers"
+            :key="'option-' + index"
+            :aria-hidden="isLoading"
+          >
+            <a
+              @click.prevent="handleGuess(index)"
+              :class="[
+                { hover: activeIndex === index },
+                { loading: isLoading }
+              ]"
+              href="#"
+              class="button--green"
             >
-              <h2>Game Over!</h2>
-              <p>
-                {{ results.value.score }} / {{ questionsPerGame }}
-              </p>
-            </aside>
-            <a @click.prevent="resultNextHandler" :aria-hidden="isLoading" :class="{ fadeOut, loading: isLoading, hover: activeIndex === 0 }" href="#" class="button--green">{{ resultButtonText }}</a>
-        </section>
-        <section v-else-if="isError" key="errorview">
-            <h1>Whoops</h1>
-            <nuxt-link :to="'/categories'">Go back</nuxt-link>
-        </section>
+              {{ possibleAnswer }}
+            </a>
+          </li>
+        </ol>
+      </section>
+      <section
+        key="resultview"
+        v-else-if="isResult"
+        class="result"
+        style="color:rgba(255,255,255,0.7);"
+      >
+        <component
+          v-if="isLoading"
+          :is="'EllipsisIcon'"
+          class="result-icon loading"
+        />
+        <component
+          v-else-if="!isLoading"
+          :is="results.value.isCorrectGuess ? 'CorrectIcon' : 'WrongIcon'"
+          class="result-icon"
+        />
+        <component
+          v-if="results.active && results.value.isCorrectGuess && !isLoading"
+          :is="'RadialIcon'"
+          class="radial"
+        />
+        <p :class="{ loading: isLoading }">
+          {{
+            isLoading || !results.active
+              ? 'Loading...'
+              : results.value.isCorrectGuess
+              ? 'Correct!'
+              : 'Wrong!'
+          }}
+        </p>
+        <aside
+          v-if="results.active && results.value.gameOver"
+          class="game-over"
+        >
+          <h2>Game Over!</h2>
+          <p>{{ results.value.score }} / {{ questionsPerGame }}</p>
+        </aside>
+        <a
+          @click.prevent="resultNextHandler"
+          :aria-hidden="isLoading"
+          :class="{ fadeOut, loading: isLoading, hover: activeIndex === 0 }"
+          href="#"
+          class="button--green"
+          >{{ resultButtonText }}</a
+        >
+      </section>
+      <section key="errorview" v-else-if="isError">
+        <h1>Whoops</h1>
+        <nuxt-link :to="'/categories'">Go back</nuxt-link>
+      </section>
     </main>
   </client-only>
 </template>
 
 <script>
+/* eslint-disable vue/require-component-is */
+// Components are used dynamically, so the linter can't see that they are, in fact, used
+/* eslint-disable vue/no-unused-components */
 import { mapState, mapActions } from 'vuex'
 import _categoriesArray from '@/static/categoriesArray'
 import LeftArrow from '@/components/icons/left-arrow.svg'
 import CloseIcon from '@/components/icons/close.svg'
-import AnyIcon from '@/components/icons/any.svg'
 import EllipsisIcon from '@/components/icons/ellipsis.svg'
 import CorrectIcon from '@/components/icons/correct.svg'
 import WrongIcon from '@/components/icons/wrong.svg'
@@ -324,7 +382,8 @@ export default {
     ComputersIcon: () => import('@/components/icons/computers.svg'),
     FilmIcon: () => import('@/components/icons/film.svg'),
     GadgetsIcon: () => import('@/components/icons/gadgets.svg'),
-    GeneralKnowledgeIcon: () => import('@/components/icons/generalKnowledge.svg'),
+    GeneralKnowledgeIcon: () =>
+      import('@/components/icons/generalKnowledge.svg'),
     GeographyIcon: () => import('@/components/icons/geography.svg'),
     HistoryIcon: () => import('@/components/icons/history.svg'),
     MathIcon: () => import('@/components/icons/math.svg'),
@@ -348,39 +407,140 @@ export default {
       fadeOut: false
     }
   },
+  computed: {
+    ...mapState([
+      'selectedCategories',
+      'questionData',
+      'fetchError',
+      'guess',
+      'results',
+      'questionsPerGame',
+      'game',
+      'isLoading'
+    ]),
+    isPlay() {
+      return this.game.stage === 'play'
+    },
+    isResult() {
+      return this.game.stage === 'results'
+    },
+    isError() {
+      return this.fetchError
+    },
+    questionObject() {
+      return this.questionData.question
+    },
+    currentCategory() {
+      return !this.isLoading && this.questionObject
+        ? this.questionObject.category
+        : 'Loading...'
+    },
+    currentQuestionType() {
+      return this.questionObject && this.questionObject.type
+        ? this.questionObject.type
+        : ''
+    },
+    currentCategoryIconComponent() {
+      let componentName = 'EllipsisIcon'
+      // we will use the ellipsis icon when loading
+      if (this.questionObject && !this.isLoading) {
+        const svgComponent = this.categoriesArray.find(
+          (obj) => obj.apiName === this.questionObject.category
+        )
+        if (svgComponent) {
+          componentName = svgComponent.componentName
+        }
+      }
+      return componentName
+    },
+    currentDifficulty() {
+      return !this.isLoading &&
+        this.questionObject &&
+        this.questionObject.difficulty
+        ? this.questionObject.difficulty
+        : 'Loading...'
+    },
+    currentPossibleAnswers() {
+      return !this.isLoading &&
+        this.questionObject.hasOwnProperty('possible_answers')
+        ? this.questionObject.possible_answers
+        : ['Loading...', 'Loading...', 'Loading...', 'Loading...']
+    },
+    currentQuestionNumberString() {
+      return !this.isLoading
+    },
+    resultButtonText() {
+      if (this.isLoading) {
+        return 'Loading'
+      } else if (this.results.active && this.results.value.gameOver) {
+        return 'New Game'
+      } else {
+        return 'Next'
+      }
+    }
+  },
+  mounted() {
+    this.initGame()
+  },
   methods: {
-    ...mapActions(['setQuestionData', 'clearQuestionData', 'setFetchError', 'setQuestionAndResults', 'setResults', 'clearResults', 'setGameStage', 'setIsLoading']),
+    ...mapActions([
+      'setQuestionData',
+      'clearQuestionData',
+      'setFetchError',
+      'setQuestionAndResults',
+      'setResults',
+      'clearResults',
+      'setGameStage',
+      'setIsLoading'
+    ]),
     setActiveIndex(index, cb) {
       if (window && window.setTimeout) {
         this.activeIndex = index
         window.setTimeout(() => {
           this.activeIndex = null
-          if (cb && (typeof cb === 'function')) {
+          if (cb && typeof cb === 'function') {
             cb()
           }
         }, 150)
       }
     },
     handleGuess(guessInt) {
-      if (this.isLoading) { return }
+      if (this.isLoading) {
+        return
+      }
       // emulates :active state in a more reliable manner across devices
       this.setActiveIndex(guessInt, () => {
         const guessString = String(guessInt)
         // set game stage to results for loading animations
         this.setGameStage('results')
-        this.apiPost('/verify', { guess: guessString}, this.setQuestionAndResults, this.setFetchError) 
+        this.apiPost(
+          '/verify',
+          { guess: guessString },
+          this.setQuestionAndResults,
+          this.setFetchError
+        )
       })
     },
     initGame() {
-    // checks for game-in-progress to resume or begins a new game
+      // checks for game-in-progress to resume or begins a new game
       if (!this.$isServer && this.selectedCategories.length) {
         // we are client-side and have categories set
-        if ((!this.questionData.question && !this.results.active) || (this.results.value && this.results.value.gameOver && !this.results.active)) {
+        if (
+          (!this.questionData.question && !this.results.active) ||
+          (this.results.value &&
+            this.results.value.gameOver &&
+            !this.results.active)
+        ) {
           // no question, begin new game. This runs on first load or after game over
           // set game stage to play for loading animations
           this.setGameStage('play')
           // start session and handle response
-          this.apiPost('/start', { categories: this.selectedCategories }, this.setQuestionData, this.setFetchError)
+          this.apiPost(
+            '/start',
+            { categories: this.selectedCategories },
+            this.setQuestionData,
+            this.setFetchError
+          )
         } else if (this.results.active) {
           // results are active but there is no game over. This path runs when the browser is reloaded while gameSTage: 'results'
           this.setGameStage('results')
@@ -392,7 +552,6 @@ export default {
     },
     apiPost(path, payload, success, fail) {
       this.setIsLoading(true)
-      let response
       fetch(this.$config.apiUrl + path, {
         method: 'POST',
         headers: {
@@ -411,7 +570,7 @@ export default {
             fail(true)
           }
         })
-        .catch((e) => (this.setFetchError(e.message)))
+        .catch((e) => this.setFetchError(e.message))
     },
     resultNextHandler() {
       this.setActiveIndex(0, () => {
@@ -445,59 +604,6 @@ export default {
       this.setGameStage(null)
       this.setIsLoading(false)
       this.$router.push('/')
-    }
-  },
-  mounted() {
-    this.initGame()
-  },
-  computed: {
-    ...mapState(['selectedCategories', 'questionData', 'fetchError', 'guess', 'results', 'questionsPerGame', 'game', 'isLoading']),
-    isPlay() {
-      return this.game.stage === 'play'
-    },
-    isResult() {
-      return this.game.stage === 'results'
-    },
-    isError() {
-      return this.fetchError
-    },
-    questionObject() {
-      return this.questionData.question
-    },
-    currentCategory() {
-      return (!this.isLoading && this.questionObject) ? this.questionObject.category : 'Loading...'
-    },
-    currentQuestionType() {
-      return (this.questionObject && this.questionObject.type) ? this.questionObject.type : ''
-    },
-    currentCategoryIconComponent() {
-      let componentName = 'EllipsisIcon'
-      // we will use the ellipsis icon when loading
-      if (this.questionObject && !this.isLoading) {
-        const svgComponent = this.categoriesArray.find(obj => obj.apiName === this.questionObject.category)
-        if (svgComponent) {
-          componentName = svgComponent.componentName
-        }
-      }
-      return componentName
-    },
-    currentDifficulty() {
-      return (!this.isLoading && this.questionObject && this.questionObject.difficulty) ? this.questionObject.difficulty : 'Loading...'
-    },
-    currentPossibleAnswers() {
-      return (!this.isLoading && this.questionObject.hasOwnProperty('possible_answers')) ? this.questionObject.possible_answers : ['Loading...', 'Loading...', 'Loading...', 'Loading...']
-    },
-    currentQuestionNumberString() {
-      return (!this.isLoading )
-    },
-    resultButtonText() {
-      if (this.isLoading) {
-        return 'Loading'
-      } else if (this.results.active && this.results.value.gameOver) {
-        return 'New Game'
-      } else {
-        return 'Next'
-      }
     }
   }
 }
