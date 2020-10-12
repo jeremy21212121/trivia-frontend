@@ -11,7 +11,7 @@ section {
   justify-content: center;
   animation: appear 200ms;
   div.cat-box {
-    @include bs-white-0;
+    @include bs-white-s0;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
@@ -21,10 +21,14 @@ section {
     transition: all ease 190ms;
     &.active {
       border-color: $white-light;
-      @include bs-white-0b;
-      background-color: rgba(63, 61, 86, 0.2);
-      background-color: rgba(59, 128, 112, 0.1);
-      background-color: rgba(50, 205, 50, 0.09);
+      @include bs-white-1b;
+      // background-color: rgba(63, 61, 86, 0.2);
+      // background-color: rgba(59, 128, 112, 0.1);
+      background-color: rgba(50, 205, 50, 0.2);
+      p {
+        color: white;
+      }
+      // background-color: rgb(126, 195, 179, 0.2);
     }
     &.disabled {
       opacity: 0.2;
