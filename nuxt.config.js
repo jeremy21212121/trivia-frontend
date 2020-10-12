@@ -1,4 +1,8 @@
 export default {
+  publicRuntimeConfig: {
+    baseUrl: process.env.BASE_URL,
+    apiUrl: process.env.API_URL
+  },
   server: {
     host: '0.0.0.0'
   },
@@ -63,11 +67,7 @@ export default {
   /*
    ** Nuxt.js modules
    */
-  modules: [
-    '@nuxtjs/pwa',
-    // Doc: https://github.com/nuxt-community/dotenv-module
-    '@nuxtjs/dotenv'
-  ],
+  modules: ['@nuxtjs/pwa'],
   /*
    ** Build configuration
    */
