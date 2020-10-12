@@ -4,20 +4,14 @@
 @import '@/scss/navButton.scss';
 
 section {
-  display: flex;
-  flex-wrap: wrap;
+  width: 99%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(45%, 1fr));
+  gap: 1vw;
   justify-content: center;
   animation: appear 200ms;
   div.cat-box {
     @include bs-white-0;
-    margin: 4px;
-    padding: 2px 1px;
-    width: 150px;
-    // max-width: 46%;
-    min-width: 150px;
-    // max-width: 225px;
-    flex-grow: 1;
-    // flex-basis: 0;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
@@ -34,11 +28,6 @@ section {
     }
     &.disabled {
       opacity: 0.2;
-    }
-    &:last-of-type {
-      flex-grow: 0;
-      width: 48%;
-      margin-right: auto;
     }
     svg {
       max-width: 220px;
