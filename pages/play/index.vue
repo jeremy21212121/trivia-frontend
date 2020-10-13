@@ -1,7 +1,7 @@
 <style lang="scss" scoped>
 @import '@/scss/colors.scss';
 @import '@/scss/boxShadows.scss';
-@import '@/scss/navButton.scss';
+// @import '@/scss/navButton.scss';
 $med-grey: rgba(170, 170, 170, 0.1);
 $gris-brilliant: rgba(190, 190, 190, 0.2);
 $med-white: rgba(255, 255, 255, 0.1);
@@ -36,51 +36,14 @@ section,
   overflow: hidden;
   max-height: 98vh;
 }
-// .appear-enter-active {
-//   animation: 1s appear ease;
-// }
-// .appear-leave-active {
-//   animation: 10ms disappear ease;
-// }
 .container {
   animation: 300ms appear;
-  nav {
-    position: absolute;
-    margin: 0;
-    width: 100%;
-    animation: 300ms appear;
-    opacity: 1;
-    transition: opacity 250ms linear;
-    &.fadeOut {
-      opacity: 0;
-    }
-    ul {
-      list-style-type: none;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: space-between;
-      li {
-        margin: 8px;
-        a {
-          svg {
-            @include nav-button(42px);
-          }
-          &:hover {
-            svg {
-              @include nav-button-active;
-            }
-          }
-        }
-      }
-    }
-  }
   section {
     width: 100%;
     min-height: 98vh;
     display: flex;
     flex-direction: column;
-    justify-content: space-evenly;
+    justify-content: space-around;
     align-items: center;
     animation: 300ms appear;
     transition: all ease 0.5s;
@@ -102,7 +65,7 @@ section,
       svg.result-icon {
         width: 85%;
         max-width: 531px;
-        margin-top: 64px;
+        margin-top: 10vh;
         z-index: 99;
         animation: appear 200ms cubic-bezier(0.165, 0.84, 0.44, 1);
       }
@@ -124,14 +87,11 @@ section,
       }
     }
     div {
-      margin: 3vh 0;
-      margin: auto 0;
       width: 100%;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      // animation: 1s appear ease;
       h1.category {
         margin-top: 16px;
         padding: 4px 8px;
@@ -189,25 +149,18 @@ section,
       color: rgba(255, 255, 255, 0.7);
       border-radius: 4px;
       line-height: 1.3;
-      margin: 5vh 1vw;
-      margin: auto 1vw;
       padding: 4px 8px;
       font-size: 20px;
       text-align: center;
-      // animation: 1s appear ease;
     }
     ol {
       width: 100%;
       padding: 0;
       margin: 0;
-      margin-top: 3vh;
-      margin: auto 0;
       list-style-type: none;
-      // height: 33vh;
       display: flex;
       flex-direction: column;
       justify-content: space-around;
-      // animation: 1s appear ease;
       li {
         width: 100%;
         margin: 1.5vh 0;
@@ -226,26 +179,19 @@ section,
   <!-- eslint-disable vue/require-component-is -->
   <client-only>
     <main class="container">
-      <nav :class="{ fadeOut }">
-        <ul>
-          <li>
-            <a @click.prevent="handleBack" href="#" title="back to categories">
-              <LeftArrow />
-            </a>
-          </li>
-          <li>
-            <a @click.prevent="handleClose" href="#" title="quit current game">
-              <CloseIcon />
-            </a>
-          </li>
-        </ul>
-      </nav>
+      <play-nav-controls
+        :disabled="fadeOut"
+        @close="handleClose"
+        @back="handleBack"
+      />
+
       <section key="playview" v-if="isPlay" class="game">
         <div>
           <!-- mark everything else aria-hidden during loading so screen readers don't read out "Loading" over and over again -->
           <h1 :class="{ loading: isLoading }" class="category" title="category">
             {{ currentCategory }}
           </h1>
+          <!-- this component will either be the question category illustration or a loading image (SVG)  -->
           <component
             :is="currentCategoryIconComponent"
             :class="{ loading: isLoading }"
@@ -363,6 +309,7 @@ import EllipsisIcon from '@/components/icons/ellipsis.svg'
 import CorrectIcon from '@/components/icons/correct.svg'
 import WrongIcon from '@/components/icons/wrong.svg'
 import RadialIcon from '@/components/icons/radial-white.svg'
+import PlayNavControls from '@/components/controls/playNavControls.vue'
 
 export default {
   name: 'PlayView',
@@ -370,6 +317,7 @@ export default {
     LeftArrow,
     CloseIcon,
     EllipsisIcon,
+    PlayNavControls,
     AnimalsIcon: () => import('@/components/icons/animals.svg'),
     AnimeIcon: () => import('@/components/icons/anime.svg'),
     AnyIcon: () => import('@/components/icons/any.svg'),
