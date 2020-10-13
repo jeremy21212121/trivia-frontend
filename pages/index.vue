@@ -27,37 +27,21 @@
         >Let's play!</a
       >
     </div>
-    <footer :class="{ fadeOut }">
-      <span>
-        <a
-          href="https://github.com/jeremy21212121/trivia-frontend"
-          title="GitHub repository"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <img src="@/assets/images/github.png" alt="GitHub repository" />
-        </a>
-      </span>
-      <p>
-        Made in Vancouver by
-        <a
-          title="Hire me"
-          href="https://jeremypoole.ca"
-          target="_blank"
-          rel="noopener"
-          >Jeremy Poole</a
-        >
-      </p>
-    </footer>
+    <play-footer :disabled="fadeOut" />
   </main>
 </template>
 
 <script>
+// import { Tab, Tabs } from 'vue-tabs-component'
 import Logo from '~/components/Logo.vue'
+import PlayFooter from '@/components/PlayFooter.vue'
 
 export default {
   components: {
-    Logo
+    Logo,
+    // Tab,
+    // Tabs,
+    PlayFooter
   },
   data() {
     return {
@@ -127,31 +111,31 @@ main.container {
     opacity: 1;
     transition: opacity 250ms linear;
   }
-  footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    opacity: 1;
-    transition: opacity 250ms linear;
-    p {
-      text-shadow: 0 0 1px $grey-faint;
-      color: $grey-faint;
-      a {
-        color: $grey-med;
-      }
-    }
-    span {
-      margin-right: 16px;
-      a {
-        display: block;
-        img {
-          width: 34px;
-          height: 34px;
-          border-radius: 50%;
-          padding: 1px;
-        }
-      }
-    }
-  }
+  // footer {
+  //   display: flex;
+  //   align-items: center;
+  //   justify-content: space-between;
+  //   opacity: 1;
+  //   transition: opacity 250ms linear;
+  //   p {
+  //     text-shadow: 0 0 1px $grey-faint;
+  //     color: $grey-faint;
+  //     a {
+  //       color: $grey-med;
+  //     }
+  //   }
+  //   span {
+  //     margin-right: 16px;
+  //     a {
+  //       display: block;
+  //       img {
+  //         width: 34px;
+  //         height: 34px;
+  //         border-radius: 50%;
+  //         padding: 1px;
+  //       }
+  //     }
+  //   }
+  // }
 }
 </style>
