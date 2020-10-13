@@ -1,6 +1,9 @@
 <template>
   <main class="container">
     <section :class="{ fadeOut }" class="title">
+      <div class="info">
+        <span @click.prevent="() => {}" title="info">&#x1F6C8;</span>
+      </div>
       <logo />
       <h1 class="title">just trivia</h1>
       <h2 class="subtitle">no nonsense</h2>
@@ -95,6 +98,17 @@ main.container {
     transition: opacity 250ms linear;
     h1.title {
       font-size: 40px;
+    }
+    .info {
+      span {
+        position: absolute;
+        top: 0;
+        right: 0;
+        color: $white-med;
+        font-size: 1.6rem;
+        padding: 8px;
+        text-shadow: 2px 2px 2px $white-light;
+      }
     }
   }
   div.play {
