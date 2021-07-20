@@ -11,19 +11,39 @@
     <div class="play" :class="{ fadeOut }">
       <a
         href="/categories"
-        @click.prevent="() => { fadeOut = true; setActiveIndex(0, () => { $router.push('/categories') }) }"
         class="button--green"
         :class="{ hover: activeIndex === 0 }"
-      >Let's play!</a>
+        @click.prevent="
+          () => {
+            fadeOut = true
+            setActiveIndex(0, () => {
+              $router.push('/categories')
+            })
+          }
+        "
+        >Let's play!</a
+      >
     </div>
     <footer :class="{ fadeOut }">
       <span>
-        <a href="https://github.com/jeremy21212121/trivia-frontend" title="GitHub repository" target="_blank" rel="noopener noreferrer">
-          <img src="@/assets/images/github.png" alt="GitHub repository">
+        <a
+          href="https://github.com/jeremy21212121/trivia-frontend"
+          title="GitHub repository"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <img src="@/assets/images/github.png" alt="GitHub repository" />
         </a>
       </span>
       <p>
-        Made in Vancouver by <a title="Hire me" href="https://jeremypoole.ca" target="_blank" rel="noopener">Jeremy Poole</a>
+        Made in Vancouver by
+        <a
+          title="Hire me"
+          href="https://jeremypoole.ca"
+          target="_blank"
+          rel="noopener"
+          >Jeremy Poole</a
+        >
       </p>
     </footer>
   </main>
@@ -34,12 +54,12 @@ import Logo from '~/components/Logo.vue'
 
 export default {
   components: {
-    Logo
+    Logo,
   },
   data() {
     return {
       activeIndex: null,
-      fadeOut: false
+      fadeOut: false,
     }
   },
   methods: {
@@ -48,13 +68,13 @@ export default {
         this.activeIndex = index
         window.setTimeout(() => {
           this.activeIndex = null
-          if (cb && (typeof cb === 'function')) {
+          if (cb && typeof cb === 'function') {
             cb()
           }
         }, 100)
       }
     },
-  }
+  },
 }
 </script>
 
@@ -83,8 +103,9 @@ main.container {
     transition: opacity 250ms linear 250ms;
   }
   span.description {
-    font-family: 'Quicksand', 'Source Sans Pro', -apple-system, BlinkMacSystemFont,
-    'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-family: 'Quicksand', 'Source Sans Pro', -apple-system,
+      BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+      sans-serif;
     font-size: 1.5rem;
     flex-grow: 2;
     padding: 0 16px;
