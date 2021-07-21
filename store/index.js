@@ -153,6 +153,7 @@ export const actions = {
      *   results: {
      *     score: Int,
      *     isCorrectGuess: Boolean,
+     *     ?correctAnswer: String,
      *     ?gameOver: Boolean
      *   },
      *   ?questionData: {
