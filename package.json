@@ -24,7 +24,7 @@
     "eslint-config-prettier": "^4.1.0",
     "eslint-plugin-nuxt": "^2.0.0",
     "eslint-plugin-prettier": "^3.4.0",
-    "node-sass": "^4.14.1",
+    "node-sass": "^7.0.0",
     "nuxt-svg-loader": "^1.2.0",
     "prettier": "^1.16.4",
     "sass": "^1.35.2",
